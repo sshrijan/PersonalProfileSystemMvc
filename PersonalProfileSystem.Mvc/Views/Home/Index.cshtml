@@ -1,0 +1,29 @@
+﻿@{
+    ViewData["Title"] = "Login";
+}
+
+<div class="container d-flex justify-content-center align-items-center vh-100">
+
+    <div class="card shadow p-4 rounded-3 w-100" style="max-width: 400px;">
+
+        <h3 class="text-center mb-4">Login</h3>
+
+        @if (ViewBag.Error != null)
+        {
+            <div class="alert alert-danger">@ViewBag.Error</div>
+        }
+
+        <form asp-action="Index" method="post">
+            <div class="mb-3">
+                <label class="form-label">User Id</label>
+                <input type="number" name="UserId" class="form-control" placeholder="Enter User Id" required />
+            </div>
+
+            <div class="d-grid">
+                <button type="submit" class="btn btn-primary">Login</button>
+            </div>
+        </form>
+
+    </div>
+
+</div>
