@@ -29,8 +29,6 @@ public partial class EmploymentHistory
 
     public DateTime? UpdatedDate { get; set; }
 
-    public int? CreatedBy { get; set; }
-
     public DateTime CreatedDate { get; set; }
 
     public virtual Company Company { get; set; } = null!;

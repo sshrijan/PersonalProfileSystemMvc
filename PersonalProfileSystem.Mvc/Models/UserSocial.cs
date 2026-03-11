@@ -21,8 +21,6 @@ public partial class UserSocial
 
     public DateTime? UpdatedDate { get; set; }
 
-    public int? CreatedBy { get; set; }
-
     public DateTime CreatedDate { get; set; }
 
     public virtual Social Social { get; set; } = null!;

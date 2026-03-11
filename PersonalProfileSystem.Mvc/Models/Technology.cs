@@ -7,7 +7,7 @@ public partial class Technology
 {
     public int TechnologyId { get; set; }
 
-    public string Technology1 { get; set; } = null!;
+    public string TechnologyName { get; set; } = null!;
 
     public bool IsDeleted { get; set; }
 

@@ -1,0 +1,34 @@
+﻿@model PersonalProfileSystem.Mvc.Models.PersonInfo
+
+@{
+    ViewData["Title"] = "Register";
+}
+
+<div class="container d-flex justify-content-center align-items-center vh-100">
+    <div class="card shadow p-4 rounded-3 w-100" style="max-width: 500px;">
+        <h3 class="text-center mb-4">Create New Profile</h3>
+
+        <form asp-action="Register" method="post">
+            <div class="mb-3">
+                <label class="form-label">First Name</label>
+                <input asp-for="FirstName" class="form-control" required />
+            </div>
+            <div class="mb-3">
+                <label class="form-label">Middle Name</label>
+                <input asp-for="MiddleName" class="form-control" />
+            </div>
+            <div class="mb-3">
+                <label class="form-label">Last Name</label>
+                <input asp-for="LastName" class="form-control" required />
+            </div>
+            <div class="mb-3">
+                <label class="form-label">Date of Birth</label>
+                <input asp-for="Dob" type="date" class="form-control" required />
+            </div>
+
+            <div class="d-grid">
+                <button type="submit" class="btn btn-success">Create Profile</button>
+            </div>
+        </form>
+    </div>
+</div>

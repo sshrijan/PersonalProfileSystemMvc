@@ -1,4 +1,5 @@
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using PersonalProfileSystem.Mvc.Data;
 using PersonalProfileSystem.Mvc.Models;
 using PersonalProfileSystem.Mvc.Services;
@@ -10,11 +11,13 @@ namespace PersonalProfileSystem.Mvc.Controllers
     {
         private readonly LoginService _loginService;
         private readonly DashboardService _dashboardService;
+        private readonly RegisterService _registerService;
 
-        public HomeController(LoginService loginService, DashboardService dashboardService)
+        public HomeController(LoginService loginService, DashboardService dashboardService, RegisterService registerService)
         {
             _loginService = loginService;
             _dashboardService = dashboardService;
+            _registerService = registerService;
         }
 
         // GET: Home or Login Page
@@ -33,7 +36,7 @@ namespace PersonalProfileSystem.Mvc.Controllers
             if (person != null)
             {
                 // Sucessful Login and redirect to dashboard
-                return RedirectToAction("Dashboard", new { userId = person.UserId });
+                return RedirectToAction("Dashboard","Dashboard", new { userId = person.UserId });
             }
 
             // Invalid User
@@ -43,15 +46,28 @@ namespace PersonalProfileSystem.Mvc.Controllers
         }
 
         // GET: Dashboard
-        public IActionResult Dashboard(int userId)
-        {
-            var dashboardData = _dashboardService.GetDashboardData(userId);
+        
 
-            if (dashboardData == null)
+        // GET: Register
+        [HttpGet]
+        public IActionResult Register()
+        {
+            return View();
+        }
+
+        // POST: Register
+        [HttpPost]
+        public IActionResult Register(PersonInfo model)
+        {
+            if (ModelState.IsValid)
             {
+                var user = _registerService.RegisterUser(model);
+
+                // Redirect to Login page after successful registration
                 return RedirectToAction("Index");
             }
-            return View(dashboardData);
+
+            return View(model);
         }
 
     }

@@ -23,8 +23,6 @@ public partial class Contact
 
     public DateTime? UpdatedDate { get; set; }
 
-    public int? CreatedBy { get; set; }
-
     public DateTime CreatedDate { get; set; }
 
     public virtual PersonInfo User { get; set; } = null!;

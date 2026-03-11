@@ -23,8 +23,6 @@ public partial class UserSkill
 
     public DateTime? UpdatedDate { get; set; }
 
-    public int? CreatedBy { get; set; }
-
     public DateTime CreatedDate { get; set; }
 
     public virtual Skill Skill { get; set; } = null!;

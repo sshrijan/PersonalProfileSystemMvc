@@ -29,3 +29,13 @@ body {
 .form-floating > .form-control-plaintext:focus::placeholder, .form-floating > .form-control:focus::placeholder {
   text-align: start;
 }
+
+.btn-transparent{
+    background-color: transparent;
+    border: none;
+    color: black;
+}
+
+.btn-transparent:hover{
+    background-color: rgba(0,0,0,0.1);
+}

@@ -5,6 +5,7 @@ namespace PersonalProfileSystem.Mvc.ViewModels
 {
     public class DashboardViewModel
     {
+        public int UserId { get; set; }
         public PersonInfo Person { get; set; } = null!;
         public Contact? Contact { get; set; }
         public List<UserEducation>? Educations { get; set; }

@@ -25,8 +25,6 @@ public partial class UserProject
 
     public DateTime? UpdatedDate { get; set; }
 
-    public int? CreatedBy { get; set; }
-
     public DateTime CreatedDate { get; set; }
 
     public virtual Project Project { get; set; } = null!;

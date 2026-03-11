@@ -12,6 +12,8 @@ builder.Services.AddDbContext<PersonalProfileSystemContext>(options =>
 
 builder.Services.AddScoped<LoginService>();
 builder.Services.AddScoped<DashboardService>();
+builder.Services.AddScoped<RegisterService>();
+builder.Services.AddScoped<IProfileService, ProfileService>();
 
 
 var app = builder.Build();

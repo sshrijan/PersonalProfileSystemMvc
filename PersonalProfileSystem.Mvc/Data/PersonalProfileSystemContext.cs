@@ -89,8 +89,7 @@ public partial class PersonalProfileSystemContext : DbContext
     public virtual DbSet<VwPersonSkill> VwPersonSkills { get; set; }
 
     protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
-#warning To protect potentially sensitive information in your connection string, you should move it out of source code. You can avoid scaffolding the connection string by using the Name= syntax to read it from configuration - see https://go.microsoft.com/fwlink/?linkid=2131148. For more guidance on storing connection strings, see https://go.microsoft.com/fwlink/?LinkId=723263.
-        => optionsBuilder.UseSqlServer("Server=(localdb)\\MSSQLLocalDB;Database=PersonalProfileSystem;Trusted_Connection=True;");
+        => optionsBuilder.UseSqlServer("Name=DefaultConnection");
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
@@ -196,7 +195,6 @@ public partial class PersonalProfileSystemContext : DbContext
             entity.HasKey(e => e.ContactId).HasName("PK_contact");
 
             entity.Property(e => e.ContactId).HasColumnName("contactId");
-            entity.Property(e => e.CreatedBy).HasColumnName("createdBy");
             entity.Property(e => e.CreatedDate)
                 .HasDefaultValueSql("(getdate())")
                 .HasColumnType("datetime")
@@ -219,7 +217,7 @@ public partial class PersonalProfileSystemContext : DbContext
             entity.HasOne(d => d.User).WithMany(p => p.Contacts)
                 .HasForeignKey(d => d.UserId)
                 .OnDelete(DeleteBehavior.ClientSetNull)
-                .HasConstraintName("FK_contacts_basicInfos1");
+                .HasConstraintName("FK_Contacts_PersonInfos");
         });
 
         modelBuilder.Entity<Education>(entity =>
@@ -254,7 +252,6 @@ public partial class PersonalProfileSystemContext : DbContext
 
             entity.Property(e => e.UserId).HasColumnName("userId");
             entity.Property(e => e.CompanyId).HasColumnName("companyId");
-            entity.Property(e => e.CreatedBy).HasColumnName("createdBy");
             entity.Property(e => e.CreatedDate)
                 .HasDefaultValueSql("(getdate())")
                 .HasColumnType("datetime")
@@ -390,10 +387,9 @@ public partial class PersonalProfileSystemContext : DbContext
 
             entity.Property(e => e.TechnologyId).HasColumnName("technologyId");
             entity.Property(e => e.IsDeleted).HasColumnName("isDeleted");
-            entity.Property(e => e.Technology1)
+            entity.Property(e => e.TechnologyName)
                 .HasMaxLength(50)
-                .IsUnicode(false)
-                .HasColumnName("Technology");
+                .IsUnicode(false);
         });
 
         modelBuilder.Entity<UsedTechnology>(entity =>
@@ -470,7 +466,6 @@ public partial class PersonalProfileSystemContext : DbContext
             entity.Property(e => e.CertificateImage)
                 .HasColumnType("image")
                 .HasColumnName("certificateImage");
-            entity.Property(e => e.CreatedBy).HasColumnName("createdBy");
             entity.Property(e => e.CreatedDate)
                 .HasDefaultValueSql("(getdate())")
                 .HasColumnType("datetime")
@@ -509,9 +504,8 @@ public partial class PersonalProfileSystemContext : DbContext
 
             entity.Property(e => e.UserId).HasColumnName("userId");
             entity.Property(e => e.EducationId).HasColumnName("educationId");
-            entity.Property(e => e.CreatedBy).HasColumnName("createdBy");
             entity.Property(e => e.CreatedDate)
-                .HasDefaultValueSql("(getdate())")
+                .HasDefaultValueSql("(getdate())", "DF__UserEduca__creat__02284B6B")
                 .HasColumnType("datetime")
                 .HasColumnName("createdDate");
             entity.Property(e => e.CurrentlyStudying).HasColumnName("currentlyStudying");
@@ -569,7 +563,6 @@ public partial class PersonalProfileSystemContext : DbContext
 
             entity.Property(e => e.LanguageId).HasColumnName("languageId");
             entity.Property(e => e.UserId).HasColumnName("userId");
-            entity.Property(e => e.CreatedBy).HasColumnName("createdBy");
             entity.Property(e => e.CreatedDate)
                 .HasDefaultValueSql("(getdate())")
                 .HasColumnType("datetime")
@@ -606,7 +599,6 @@ public partial class PersonalProfileSystemContext : DbContext
 
             entity.Property(e => e.UserId).HasColumnName("userId");
             entity.Property(e => e.ProjectId).HasColumnName("projectId");
-            entity.Property(e => e.CreatedBy).HasColumnName("createdBy");
             entity.Property(e => e.CreatedDate)
                 .HasDefaultValueSql("(getdate())")
                 .HasColumnType("datetime")
@@ -649,7 +641,6 @@ public partial class PersonalProfileSystemContext : DbContext
             entity.Property(e => e.UserId).HasColumnName("userId");
             entity.Property(e => e.CompanyId).HasColumnName("companyId");
             entity.Property(e => e.Amount).HasColumnName("amount");
-            entity.Property(e => e.CreatedBy).HasColumnName("createdBy");
             entity.Property(e => e.CreatedDate)
                 .HasDefaultValueSql("(getdate())", "DF__UserSalar__creat__05F8DC4F")
                 .HasColumnType("datetime")
@@ -685,7 +676,6 @@ public partial class PersonalProfileSystemContext : DbContext
 
             entity.Property(e => e.SkillId).HasColumnName("skillId");
             entity.Property(e => e.UserId).HasColumnName("userId");
-            entity.Property(e => e.CreatedBy).HasColumnName("createdBy");
             entity.Property(e => e.CreatedDate)
                 .HasDefaultValueSql("(getdate())")
                 .HasColumnType("datetime")
@@ -726,7 +716,6 @@ public partial class PersonalProfileSystemContext : DbContext
 
             entity.Property(e => e.UserId).HasColumnName("userId");
             entity.Property(e => e.SocialId).HasColumnName("socialId");
-            entity.Property(e => e.CreatedBy).HasColumnName("createdBy");
             entity.Property(e => e.CreatedDate)
                 .HasDefaultValueSql("(getdate())")
                 .HasColumnType("datetime")

@@ -25,8 +25,6 @@ public partial class UserEducation
 
     public DateTime? UpdatedDate { get; set; }
 
-    public int? CreatedBy { get; set; }
-
     public DateTime CreatedDate { get; set; }
 
     public virtual Education Education { get; set; } = null!;
