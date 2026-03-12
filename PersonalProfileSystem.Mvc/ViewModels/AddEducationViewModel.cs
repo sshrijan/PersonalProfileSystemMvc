@@ -3,13 +3,18 @@ public class AddEducationViewModel
 {
     public int UserId { get; set; }
 
-    public string Degree { get; set; }
+    public string InstitutionName { get; set; } = null!;
 
-    public string Field { get; set; }
+    public string Degree { get; set; } = null!;
 
-    public string InstitutionName { get; set; }
+    public string Field { get; set; } = null!;
 
-    public string Location { get; set; }
+    public string Location { get; set; } = null!;
+
+    public bool? CurrentlyStudying { get; set; }
+
+    public double? Grade { get; set; }
 
     public int? PassedYear { get; set; }
+
 }

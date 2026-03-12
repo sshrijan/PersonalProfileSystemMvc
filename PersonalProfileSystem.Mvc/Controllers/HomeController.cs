@@ -3,6 +3,7 @@ using Microsoft.EntityFrameworkCore;
 using PersonalProfileSystem.Mvc.Data;
 using PersonalProfileSystem.Mvc.Models;
 using PersonalProfileSystem.Mvc.Services;
+using PersonalProfileSystem.Mvc.ViewModels;
 using System.Linq;
 
 namespace PersonalProfileSystem.Mvc.Controllers
@@ -29,9 +30,9 @@ namespace PersonalProfileSystem.Mvc.Controllers
 
         // POST: Login validation
         [HttpPost]
-        public IActionResult Index(int userId)
+        public async Task<IActionResult> Index(int userId)
         {
-            var person = _loginService.ValidateLogin(userId);
+            var person = await _loginService.ValidateLogin(userId);
 
             if (person != null)
             {
@@ -45,29 +46,42 @@ namespace PersonalProfileSystem.Mvc.Controllers
 
         }
 
-        // GET: Dashboard
-        
 
         // GET: Register
         [HttpGet]
         public IActionResult Register()
         {
-            return View();
+            return View(new PersonInfo());
         }
 
         // POST: Register
         [HttpPost]
-        public IActionResult Register(PersonInfo model)
+        public IActionResult Register(PersonInfo person, string Email, string Phone)
         {
-            if (ModelState.IsValid)
-            {
-                var user = _registerService.RegisterUser(model);
+            if (!ModelState.IsValid)
+                return View(person);
 
-                // Redirect to Login page after successful registration
-                return RedirectToAction("Index");
+            // Save Person
+            var createdPerson = _registerService.RegisterUser(person);
+
+            // Parse Phone safely
+            long phoneNumber = 0;
+            if (!string.IsNullOrEmpty(Phone))
+            {
+                long.TryParse(Phone, out phoneNumber);
             }
 
-            return View(model);
+            // Save Contact
+            var contact = new Contact
+            {
+                UserId = createdPerson.UserId,
+                Email = Email,
+                Phone = phoneNumber
+            };
+
+            _registerService.AddContact(contact);
+
+            return RedirectToAction("Index");
         }
 
     }

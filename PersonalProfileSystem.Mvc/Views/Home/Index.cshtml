@@ -2,29 +2,120 @@
     ViewData["Title"] = "Login";
 }
 
-<div class="container d-flex justify-content-center align-items-center vh-100">
+<style>
+    html, body {
+        height: 100%;
+        margin: 0;
+        padding: 0;
+        overflow: hidden; /* Prevents page scrolling */
+    }
 
-    <div class="card shadow p-4 rounded-3 w-100" style="max-width: 400px;">
+    .login-container {
+        height: 100vh;
+        width: 100vw;
+        overflow: hidden; /* Prevents container scrolling */
+    }
 
-        <h3 class="text-center mb-4">Login</h3>
+    .login-row {
+        height: 100vh;
+        display: flex;
+        flex-wrap: nowrap;
+    }
 
-        @if (ViewBag.Error != null)
-        {
-            <div class="alert alert-danger">@ViewBag.Error</div>
+    .left-side {
+        height: 100vh;
+        background: linear-gradient(135deg, #6a11cb 0%, #2575fc 100%);
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: flex-start;
+        padding: 3rem;
+    }
+
+    .right-side {
+        height: 100vh;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        overflow-y: auto; /* Allows right side content to scroll if needed, but keeps layout fixed */
+        padding: 20px;
+    }
+
+    .login-card {
+        max-width: 400px;
+        width: 100%;
+        border: none;
+        border-radius: 2rem !important;
+        margin: auto;
+    }
+
+    /* Optional: Adjust for smaller screens */
+    @@media (max-width: 768px) {
+        .right-side {
+            height: 100vh;
+            overflow-y: auto;
         }
+    }
+</style>
 
-        <form asp-action="Index" method="post">
-            <div class="mb-3">
-                <label class="form-label">User Id</label>
-                <input type="number" name="UserId" class="form-control" placeholder="Enter User Id" required />
-            </div>
+<div class="login-container">
+    <div class="login-row row g-0">
+        <!-- Left side: Welcome section -->
+        <div class="col-md-6 d-none d-md-flex left-side">
+            <h1 class="display-4 fw-bold mb-3 text-white">Welcome to Personal Profile System</h1>
+            <p class="lead mb-4 text-white">Build your profile. Track your skills. Shine online.</p>
+            <p class="fst-italic text-white">“Your profile, your story, your future.”</p>
+        </div>
 
-            <div class="d-grid">
-                <button type="submit" class="btn btn-primary">Login</button>
+        <!-- Right side: Login card -->
+        <div class="col-md-6 right-side">
+            <div class="card shadow-lg login-card p-4 p-md-5">
+
+                <div class="text-center mb-4">
+                    <div class="bg-primary rounded-circle mx-auto mb-3 d-flex align-items-center justify-content-center"
+                         style="width:60px; height:60px;">
+                        <i class="bi bi-person-fill text-white fs-3"></i>
+                    </div>
+                    <h3 class="fw-bold">Login</h3>
+                    <p class="text-muted">Enter your User ID to continue</p>
+                </div>
+
+                @if (ViewBag.Error != null)
+                {
+                    <div class="alert alert-danger alert-dismissible fade show" role="alert">
+                        @ViewBag.Error
+                        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                    </div>
+                }
+
+                <form asp-action="Index" method="post">
+                    <div class="mb-4">
+                        <label class="form-label fw-semibold">User ID</label>
+                        <div class="input-group">
+                            <span class="input-group-text bg-light">
+                                <i class="bi bi-person"></i>
+                            </span>
+                            <input type="number" name="UserId" class="form-control form-control-lg"
+                                   placeholder="Enter your User ID" required
+                                   min="1" step="1" />
+                        </div>
+                    </div>
+
+                    <div class="d-grid mb-3">
+                        <button type="submit" class="btn btn-primary btn-lg shadow-sm py-3">
+                            <i class="bi bi-box-arrow-in-right me-2"></i>Login
+                        </button>
+                    </div>
+
+                    <div class="text-center">
+                        <a asp-action="Register" class="text-decoration-none">
+                            <i class="bi bi-person-plus me-1"></i>Create a New Profile?
+                        </a>
+                    </div>
+                </form>
+
             </div>
-            <a asp-action="Register" class="d-block mt-2 text-center">Create a New Profile?</a>
-        </form>
+        </div>
 
     </div>
-
 </div>

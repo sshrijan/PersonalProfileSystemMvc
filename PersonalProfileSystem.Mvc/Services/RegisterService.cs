@@ -1,34 +1,28 @@
 ﻿using PersonalProfileSystem.Mvc.Data;
 using PersonalProfileSystem.Mvc.Models;
 
-namespace PersonalProfileSystem.Mvc.Services
+public class RegisterService
 {
-    public class RegisterService
+    private readonly PersonalProfileSystemContext _context;
+
+    public RegisterService(PersonalProfileSystemContext context)
     {
-        private readonly PersonalProfileSystemContext _context;
+        _context = context;
+    }
 
-        public RegisterService(PersonalProfileSystemContext context)
-        {
-            _context = context;
-        }
+    public PersonInfo RegisterUser(PersonInfo person)
+    {
+        person.CreatedDate = DateTime.Now;
+        person.IsDeleted = false;
 
-        // Validate login (existing)
-        public PersonInfo? ValidateLogin(int userId)
-        {
-            return _context.PersonInfos
-                           .FirstOrDefault(p => p.UserId == userId && !p.IsDeleted);
-        }
+        _context.PersonInfos.Add(person);
+        _context.SaveChanges(); // generates UserId
+        return person;
+    }
 
-        // Register new user
-        public PersonInfo RegisterUser(PersonInfo model)
-        {
-            model.CreatedDate = DateTime.Now;
-            model.IsDeleted = false;
-
-            _context.PersonInfos.Add(model);
-            _context.SaveChanges();
-
-            return model;
-        }
+    public void AddContact(Contact contact)
+    {
+        _context.Contacts.Add(contact);
+        _context.SaveChanges();
     }
 }

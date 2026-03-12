@@ -29,15 +29,6 @@ namespace PersonalProfileSystem.Mvc.Controllers
             return View(dashboardVM);
         }
 
-        public IActionResult AddSkill(int userId)
-        {
-            var model = new AddSkillViewModel
-            {
-                UserId = userId
-            };
-            return View(model);
-        }
-
         [HttpPost]
         public async Task<IActionResult> AddSkill(AddSkillViewModel model)
         {
@@ -48,5 +39,19 @@ namespace PersonalProfileSystem.Mvc.Controllers
 
             return RedirectToAction("Dashboard", new { userId = model.UserId });
         }
+
+        //[HttpPost]
+        //public async Task<IActionResult> AddAddress(AddAddressViewModel model)
+        //{
+            
+        //}
+
+
+        //[HttpPost]
+        //public async Task<IActionResult> AddEducation(AddAddressViewModel model)
+        //{
+            
+        //}
+
     }
 }

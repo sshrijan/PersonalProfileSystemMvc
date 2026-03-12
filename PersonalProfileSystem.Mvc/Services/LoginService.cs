@@ -1,5 +1,6 @@
 ﻿using PersonalProfileSystem.Mvc.Data;
 using PersonalProfileSystem.Mvc.Models;
+using Microsoft.EntityFrameworkCore;
 using System.Linq;
 
 namespace PersonalProfileSystem.Mvc.Services
@@ -13,11 +14,11 @@ namespace PersonalProfileSystem.Mvc.Services
             _context = context;
         }
 
-        
-        public PersonInfo? ValidateLogin(int userId)
+
+        public async Task<PersonInfo?> ValidateLogin(int userId)
         {
-            return _context.PersonInfos
-                           .FirstOrDefault(p => p.UserId == userId && !p.IsDeleted);
+            return await _context.PersonInfos
+                .FirstOrDefaultAsync(p => p.UserId == userId && !p.IsDeleted);
         }
     }
 }

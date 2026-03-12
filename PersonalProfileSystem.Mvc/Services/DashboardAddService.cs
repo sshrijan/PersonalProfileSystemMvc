@@ -6,11 +6,11 @@ using System.Linq;
 
 namespace PersonalProfileSystem.Mvc.Services
 {
-    public class ProfileService : IProfileService
+    public class DashboardAddService : IProfileService
     {
         private readonly PersonalProfileSystemContext _context;
 
-        public ProfileService(PersonalProfileSystemContext context)
+        public DashboardAddService(PersonalProfileSystemContext context)
         {
             _context = context;
         }
@@ -48,7 +48,7 @@ namespace PersonalProfileSystem.Mvc.Services
             // Make sure the userId is valid
             if (model.UserId == 0) throw new ArgumentException("UserId cannot be 0");
 
-            // 1️⃣ Check if skill already exists
+            // Check if skill already exists
             var skill = await _context.Skills
                 .FirstOrDefaultAsync(s => s.SkillName == model.SkillName);
 
@@ -59,14 +59,14 @@ namespace PersonalProfileSystem.Mvc.Services
                 await _context.SaveChangesAsync(); // generate SkillId
             }
 
-            // 2️⃣ Make sure this user doesn't already have this skill
+            // Make sure this user doesn't already have this skill
             var existingUserSkill = await _context.UserSkills
                 .FirstOrDefaultAsync(us => us.UserId == model.UserId && us.SkillId == skill.SkillId);
 
             if (existingUserSkill != null)
                 return; // skip adding duplicate
 
-            // 3️⃣ Add to UserSkills
+            // Add to UserSkills
             var userSkill = new UserSkill
             {
                 UserId = model.UserId,

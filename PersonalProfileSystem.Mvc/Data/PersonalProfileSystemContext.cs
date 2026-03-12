@@ -513,7 +513,10 @@ public partial class PersonalProfileSystemContext : DbContext
             entity.Property(e => e.DeletedDate)
                 .HasColumnType("datetime")
                 .HasColumnName("deletedDate");
-            entity.Property(e => e.Grade).HasColumnName("grade");
+            entity.Property(e => e.Grade)
+                .HasMaxLength(50)
+                .IsUnicode(false)
+                .HasColumnName("grade");
             entity.Property(e => e.IsActive)
                 .HasDefaultValue(true, "DF__UserEduca__isDel__01342732")
                 .HasColumnName("isActive");
