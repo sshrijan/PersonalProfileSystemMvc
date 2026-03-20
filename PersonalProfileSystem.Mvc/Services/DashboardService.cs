@@ -15,29 +15,30 @@ namespace PersonalProfileSystem.Mvc.Services
             _context = context;
         }
 
-        public DashboardViewModel GetDashboardData(int userId)
+        public async Task<DashboardViewModel> GetDashboardData(int userId)
         {
-            var person = _context.PersonInfos.FirstOrDefault(p => p.UserId == userId && !p.IsDeleted);
+            var person = await _context.PersonInfos
+                .FirstOrDefaultAsync(p => p.UserId == userId && !p.IsDeleted);
 
             if (person == null) return null!;
 
-            var contact = _context.Contacts.FirstOrDefault(c => c.UserId == userId && !c.IsDeleted);
+            var contact = await _context.Contacts
+                .FirstOrDefaultAsync(c => c.UserId == userId && !c.IsDeleted);
 
-            var educations = _context.UserEducations
-                                     .Include(ue => ue.Education)
-                                     .Where(ue => ue.UserId == userId && ue.IsActive)
-                                     .ToList();
+            var educations = await _context.UserEducations
+                .Include(ue => ue.Education)
+                .Where(ue => ue.UserId == userId && ue.IsActive)
+                .ToListAsync();
 
-            var addresses = _context.UserAddresses
-                                    .Include(ua => ua.Address)
-                                    .Where(ua => ua.UserId == userId && ua.IsActive)
-                                    .ToList();
+            var addresses = await _context.UserAddresses
+                .Include(ua => ua.Address)
+                .Where(ua => ua.UserId == userId && ua.IsActive)
+                .ToListAsync();
 
-            var skills = _context.UserSkills
+            var skills = await _context.UserSkills
                 .Include(us => us.Skill)
                 .Where(us => us.UserId == userId && us.IsActive)
-                .ToList();
-                                    
+                .ToListAsync();
 
             return new DashboardViewModel
             {
@@ -45,7 +46,8 @@ namespace PersonalProfileSystem.Mvc.Services
                 Contact = contact,
                 Educations = educations,
                 Addresses = addresses,
-                Skills = skills
+                Skills = skills,
+                UserId = userId
             };
         }
     }

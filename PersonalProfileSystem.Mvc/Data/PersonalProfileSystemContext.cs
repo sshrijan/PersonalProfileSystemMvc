@@ -62,8 +62,6 @@ public partial class PersonalProfileSystemContext : DbContext
 
     public virtual DbSet<UserProject> UserProjects { get; set; }
 
-    public virtual DbSet<UserSalary> UserSalaries { get; set; }
-
     public virtual DbSet<UserSkill> UserSkills { get; set; }
 
     public virtual DbSet<UserSocial> UserSocials { get; set; }
@@ -153,12 +151,6 @@ public partial class PersonalProfileSystemContext : DbContext
             entity.Property(e => e.CompanyName)
                 .HasMaxLength(50)
                 .HasColumnName("companyName");
-            entity.Property(e => e.Country)
-                .HasMaxLength(50)
-                .HasColumnName("country");
-            entity.Property(e => e.District)
-                .HasMaxLength(50)
-                .HasColumnName("district");
             entity.Property(e => e.IsDeleted).HasColumnName("isDeleted");
             entity.Property(e => e.SalaryId).HasColumnName("salaryId");
         });
@@ -253,7 +245,7 @@ public partial class PersonalProfileSystemContext : DbContext
             entity.Property(e => e.UserId).HasColumnName("userId");
             entity.Property(e => e.CompanyId).HasColumnName("companyId");
             entity.Property(e => e.CreatedDate)
-                .HasDefaultValueSql("(getdate())")
+                .HasDefaultValueSql("(getdate())", "DF__Employmen__creat__041093DD")
                 .HasColumnType("datetime")
                 .HasColumnName("createdDate");
             entity.Property(e => e.DeletedBy).HasColumnName("deletedBy");
@@ -269,6 +261,9 @@ public partial class PersonalProfileSystemContext : DbContext
                 .HasMaxLength(50)
                 .IsUnicode(false)
                 .HasColumnName("jobTitle");
+            entity.Property(e => e.Salary)
+                .HasColumnType("decimal(18, 2)")
+                .HasColumnName("salary");
             entity.Property(e => e.StartDate).HasColumnName("startDate");
             entity.Property(e => e.UpdatedBy).HasColumnName("updatedBy");
             entity.Property(e => e.UpdatedDate)
@@ -633,42 +628,6 @@ public partial class PersonalProfileSystemContext : DbContext
                 .HasForeignKey(d => d.UserId)
                 .OnDelete(DeleteBehavior.ClientSetNull)
                 .HasConstraintName("FK_userProjects_basicInfos2");
-        });
-
-        modelBuilder.Entity<UserSalary>(entity =>
-        {
-            entity.HasKey(e => new { e.UserId, e.CompanyId });
-
-            entity.ToTable("UserSalary");
-
-            entity.Property(e => e.UserId).HasColumnName("userId");
-            entity.Property(e => e.CompanyId).HasColumnName("companyId");
-            entity.Property(e => e.Amount).HasColumnName("amount");
-            entity.Property(e => e.CreatedDate)
-                .HasDefaultValueSql("(getdate())", "DF__UserSalar__creat__05F8DC4F")
-                .HasColumnType("datetime")
-                .HasColumnName("createdDate");
-            entity.Property(e => e.DeletedBy).HasColumnName("deletedBy");
-            entity.Property(e => e.DeletedDate)
-                .HasColumnType("datetime")
-                .HasColumnName("deletedDate");
-            entity.Property(e => e.IsActive)
-                .HasDefaultValue(true, "DF__UserSalar__isDel__0504B816")
-                .HasColumnName("isActive");
-            entity.Property(e => e.UpdatedBy).HasColumnName("updatedBy");
-            entity.Property(e => e.UpdatedDate)
-                .HasColumnType("datetime")
-                .HasColumnName("updatedDate");
-
-            entity.HasOne(d => d.Company).WithMany(p => p.UserSalaries)
-                .HasForeignKey(d => d.CompanyId)
-                .OnDelete(DeleteBehavior.ClientSetNull)
-                .HasConstraintName("FK_UserSalary_Company");
-
-            entity.HasOne(d => d.User).WithMany(p => p.UserSalaries)
-                .HasForeignKey(d => d.UserId)
-                .OnDelete(DeleteBehavior.ClientSetNull)
-                .HasConstraintName("FK_CurrentSalary_PersonInfos");
         });
 
         modelBuilder.Entity<UserSkill>(entity =>

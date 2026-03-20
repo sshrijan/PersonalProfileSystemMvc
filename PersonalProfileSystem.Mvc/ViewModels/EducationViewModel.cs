@@ -13,7 +13,7 @@ public class AddEducationViewModel
 
     public bool? CurrentlyStudying { get; set; }
 
-    public double? Grade { get; set; }
+    public string? Grade { get; set; }
 
     public int? PassedYear { get; set; }
 

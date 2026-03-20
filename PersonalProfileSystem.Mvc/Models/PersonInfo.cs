@@ -45,8 +45,6 @@ public partial class PersonInfo
 
     public virtual ICollection<UserProject> UserProjects { get; set; } = new List<UserProject>();
 
-    public virtual ICollection<UserSalary> UserSalaries { get; set; } = new List<UserSalary>();
-
     public virtual ICollection<UserSkill> UserSkills { get; set; } = new List<UserSkill>();
 
     public virtual ICollection<UserSocial> UserSocials { get; set; } = new List<UserSocial>();

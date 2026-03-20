@@ -19,6 +19,8 @@ public partial class EmploymentHistory
 
     public int? YearsOfExperience { get; set; }
 
+    public decimal? Salary { get; set; }
+
     public bool IsActive { get; set; }
 
     public int? DeletedBy { get; set; }

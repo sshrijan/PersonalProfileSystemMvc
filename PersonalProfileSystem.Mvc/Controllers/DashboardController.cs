@@ -14,10 +14,10 @@ namespace PersonalProfileSystem.Mvc.Controllers
             _dashboardService = dashboardService;
         }
 
-
-        public IActionResult Dashboard(int userId)
+        [HttpGet]
+        public async  Task<IActionResult> Dashboard(int userId)
         {
-            var dashboardVM = _dashboardService.GetDashboardData(userId);
+            var dashboardVM = await _dashboardService.GetDashboardData(userId);
 
             if (dashboardVM == null || dashboardVM.Person == null)
             {
@@ -29,29 +29,50 @@ namespace PersonalProfileSystem.Mvc.Controllers
             return View(dashboardVM);
         }
 
+
+        [HttpPost]
+        public async Task<IActionResult> AddAddress(AddAddressViewModel model)
+        {
+            if (!ModelState.IsValid)
+            {
+                var dashboardModel = await _dashboardService.GetDashboardData(model.UserId);
+            return View("Dashboard", dashboardModel);
+
+            }
+
+            await _service.AddAddress(model);
+            return RedirectToAction("Dashboard", new { userId = model.UserId });
+
+        }
+
         [HttpPost]
         public async Task<IActionResult> AddSkill(AddSkillViewModel model)
         {
             if (!ModelState.IsValid)
-                return RedirectToAction("Dashboard", new { userId = model.UserId });
+            {
+                var dashboardModel = await _dashboardService.GetDashboardData(model.UserId);
+                return View("Dashboard", dashboardModel);
+            }
+
 
             await _service.AddSkill(model);
 
             return RedirectToAction("Dashboard", new { userId = model.UserId });
         }
 
-        //[HttpPost]
-        //public async Task<IActionResult> AddAddress(AddAddressViewModel model)
-        //{
-            
-        //}
+        [HttpPost]
+        public async Task<IActionResult> AddEducation(AddEducationViewModel model)
+        {
+            if (!ModelState.IsValid)
+            {
+                var dashboardModel = await _dashboardService.GetDashboardData(model.UserId);
+                return View("Dashboard", dashboardModel);
 
+            }
 
-        //[HttpPost]
-        //public async Task<IActionResult> AddEducation(AddAddressViewModel model)
-        //{
-            
-        //}
+            await _service.AddEducation(model);
+            return RedirectToAction("Dashboard", new { userId = model.UserId });
 
+        }
     }
 }
