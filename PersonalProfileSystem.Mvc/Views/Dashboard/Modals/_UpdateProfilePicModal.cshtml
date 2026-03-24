@@ -1,0 +1,42 @@
+﻿<!-- Update Profile Picture Modal -->
+<div class="modal fade" id="updateProfilePicModal" tabindex="-1" aria-labelledby="updateProfilePicModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content border-0 shadow-lg rounded-4">
+
+            <div class="p-3">
+                <div class="modal-header border-0 pb-0">
+                    <h5 class="modal-title fw-bold" id="updateProfilePicModalLabel">Update Profile Picture</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+
+                <div class="modal-body pt-0">
+                    <!-- Update Form -->
+                    <form asp-action="UpdateProfilePicture" method="post" enctype="multipart/form-data" id="updateProfilePicForm">
+                        <input type="hidden" name="UserId" value="@Model.UserId" />
+
+                        <div class="mb-3">
+                            <label class="form-label fw-semibold">Current Profile Picture</label>
+                            <div class="text-center mb-3">
+                                <img src="~/images/profile/sshree.jpg" id="currentProfilePic"
+                                     style="width:150px; height:150px; object-fit:cover; border-radius:50%; border:3px solid #ddd;" />
+                            </div>
+                        </div>
+
+                        <div class="mb-3">
+                            <label class="form-label fw-semibold">Upload New Profile Picture</label>
+                            <input type="file" name="ProfilePicture" class="form-control form-control-lg"
+                                   accept="image/*" required />
+                            <small class="text-muted">Supported formats: JPG, PNG, GIF (Max: 5MB)</small>
+                        </div>
+                    </form>
+                </div>
+
+                <div class="modal-footer border-0 pt-0">
+                    <button type="button" class="btn btn-outline-secondary rounded-pill" data-bs-dismiss="modal">Cancel</button>
+                    <button type="submit" form="updateProfilePicForm" class="btn btn-primary rounded-pill px-4">Update Picture</button>
+                </div>
+            </div>
+
+        </div>
+    </div>
+</div>
