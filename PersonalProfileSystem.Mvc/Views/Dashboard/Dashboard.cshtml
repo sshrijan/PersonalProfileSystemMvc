@@ -42,247 +42,88 @@
         </div>
 
     <!-- Addresses -->
-        <div class="card shadow-sm rounded-4 mb-2 p-3">
-            <div>
-                <h5 class="fw-bold d-inline"><i class="fa-solid fa-location-arrow" style="color: rgb(99, 230, 190);"></i> Addresses</h5>
-                <button class="btn btn-transparent float-end rounded-circle"><i class="fa-solid fa-pen-to-square"></i></button>
-                <a href="#" class="btn btn-transparent float-end rounded-circle mx-2" data-bs-toggle="modal" data-bs-target="#addAddressModal">
-                    <i class="fa-solid fa-plus"></i>
-                </a>
+            <div class="card shadow-sm rounded-4 mb-2 p-3">
+                <div>
+                    <h5 class="fw-bold d-inline"><i class="fa-solid fa-location-arrow" style="color: rgb(99, 230, 190);"></i> Addresses</h5>
+                    <a href="#" class="btn btn-transparent float-end rounded-circle" data-bs-toggle="modal" data-bs-target="#addAddressModal">
+                        <i class="fa-solid fa-plus"></i>
+                    </a>
+                </div>
+
+                <ul class="list-unstyled mx-0">
+                    @foreach (var ua in Model.Addresses)
+                    {
+                        var addr = ua.Address;
+                        <li class="d-flex justify-content-between align-items-center mx-3">
+                            <span>@addr.Tole, Ward @addr.Ward, @addr.DistrictCity, @addr.ProvinceState, @addr.Country</span>
+                            <button class="btn btn-transparent rounded-circle"><i class="fa-solid fa-pen-to-square"></i></button>
+                        </li>
+                    }
+                </ul>
             </div>
 
-            <ul class="list-unstyled mb-0">
-                @foreach (var ua in Model.Addresses)
-                {
-                    var addr = ua.Address;
-                    <li>@addr.Tole, Ward @addr.Ward, @addr.DistrictCity, @addr.ProvinceState, @addr.Country</li>
-                }
-            </ul>
-        </div>
-
-    <!-- Skills -->
-    <div class="card shadow-sm rounded-4 mb-2 p-3">
-        <div class="mb-2">
-            <h5 class="fw-bold mb-3 d-inline"><i class="fa-solid fa-star" style="color: rgb(255, 212, 59);"></i> Skills</h5>
-            <button class="btn btn-transparent float-end rounded-circle"><i class="fa-solid fa-pen-to-square"></i></button>
-            <a href="#" class="btn btn-transparent float-end rounded-circle mx-2" data-bs-toggle="modal" data-bs-target="#addSkillModal">
-                <i class="fa-solid fa-plus"></i>
-            </a>
-        </div>
-        <div class="row g-2">
-            @foreach (var us in Model.Skills)
-            {
-                var skill = us.Skill;
-                <div class="col-6 col-sm-4 col-md-3 col-lg-2">
-                    <div class="bg-primary text-white text-center p-2 rounded d-flex align-items-center justify-content-center" style="height: 40px;">
-                        <span class="text-truncate" title="@($"{skill.SkillName} ({us.SkillLevel}) {us.YearsOfExperience}")">
-                            @skill.SkillName (@us.SkillLevel)
-                        </span>
-                    </div>
+            <!-- Skills -->
+            <div class="card shadow-sm rounded-4 mb-2 p-3">
+                <div class="mb-2">
+                    <h5 class="fw-bold mb-3 d-inline"><i class="fa-solid fa-star" style="color: rgb(255, 212, 59);"></i> Skills</h5>
+                    <a href="#" class="btn btn-transparent float-end rounded-circle" data-bs-toggle="modal" data-bs-target="#addSkillModal">
+                        <i class="fa-solid fa-plus"></i>
+                    </a>
                 </div>
-            }
-        </div>
-    </div>
 
-    <!-- Education -->
-        <div class="card shadow-sm rounded-4 mb-2 p-3">
-            <div class="mb-2">
-                <h5 class="fw-bold d-inline"><i class="fa-solid fa-graduation-cap"></i> Education</h5>
-                <button class="btn btn-transparent float-end rounded-circle"><i class="fa-solid fa-pen-to-square"></i></button>
-                <a href="#" class="btn btn-transparent float-end rounded-circle mx-2" data-bs-toggle="modal" data-bs-target="#addEducationModal">
-                    <i class="fa-solid fa-plus"></i>
-                </a>
+                <ul class="list-group list-group-flush">
+                    @if (Model.Skills.Any())
+                    {
+                        foreach (var us in Model.Skills)
+                        {
+                            var skill = us.Skill;
+                            <li class="list-group-item d-flex justify-content-between align-items-center">
+                                <div>
+                                    <div>
+                                        <strong>@skill.SkillName</strong>
+                                        <span class="text-muted">(@us.SkillLevel)</span>
+                                    </div>
+                                    <div><small>@us.YearsOfExperience years of experience</small></div>
+                                </div>
+                                <button class="btn btn-transparent rounded-circle"><i class="fa-solid fa-pen-to-square"></i></button>
+                            </li>
+                        }
+                    }
+                    else
+                    {
+                        <li class="list-group-item text-muted">No skills added yet.</li>
+                    }
+                </ul>
             </div>
-            <ul class="list-group list-group-flush">
-                @foreach (var ue in Model.Educations)
-                {
-                    var edu = ue.Education;
-                    <li class="list-group-item">
-                        <strong>@edu.Degree</strong> in @edu.Field <br />
-                        @edu.InstitutionName, @edu.Location (@(ue.PassedYear?.ToString() ?? "Present"))
-                    </li>
-                }
-            </ul>
-        </div>
 
+            <!-- Education -->
+            <div class="card shadow-sm rounded-4 mb-2 p-3">
+                <div class="mb-2">
+                    <h5 class="fw-bold d-inline"><i class="fa-solid fa-graduation-cap"></i> Education</h5>
+                    <a href="#" class="btn btn-transparent float-end rounded-circle" data-bs-toggle="modal" data-bs-target="#addEducationModal">
+                        <i class="fa-solid fa-plus"></i>
+                    </a>
+                </div>
+                <ul class="list-group list-group-flush">
+                    @foreach (var ue in Model.Educations)
+                    {
+                        var edu = ue.Education;
+                        <li class="list-group-item d-flex justify-content-between align-items-center">
+                            <div>
+                                <strong>@edu.Degree</strong> in @edu.Field <br />
+                                @edu.InstitutionName, @edu.Location (@(ue.PassedYear?.ToString() ?? "Present"))
+                            </div>
+                            <button class="btn btn-transparent rounded-circle"><i class="fa-solid fa-pen-to-square"></i></button>
+                        </li>
+                    }
+                </ul>
+            </div>
+
+        @await Html.PartialAsync("Modals/_AddAddressModal", Model)
+        @await Html.PartialAsync("Modals/_AddSkillModal", Model)
+        @await Html.PartialAsync("Modals/_AddEducationModal", Model)
 </div>
 
 
 
 
-<!-- ===== Add Address Modal ===== -->
-<div class="modal fade" id="addAddressModal" tabindex="-1" aria-labelledby="addAddressModalLabel" aria-hidden="true">
-    <div class="modal-dialog modal-dialog-centered">
-        <div class="modal-content border-0 shadow-lg rounded-4">
-
-            <form asp-action="AddAddress" method="post" class="p-3">
-                <!-- Hidden UserId -->
-                <input type="hidden" name="UserId" value="@Model.UserId" />
-
-                <div class="modal-header border-0 pb-0">
-                    <h5 class="modal-title fw-bold" id="addAddressModalLabel">Add New Address</h5>
-                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                </div>
-
-                <div class="modal-body pt-0">
-                    <!-- Address Name -->
-                    <div class="mb-3">
-                        <input name="Country" class="form-control form-control-lg" placeholder="Country (e.g. Nepal)" required />
-                    </div>
-                    <div class="mb-3">
-                        <input name="ProvinceState" class="form-control form-control-lg" placeholder="Province (e.g. Bagmati)" required />
-                    </div>
-                    <div class="mb-3">
-                        <input name="DistrictCity" class="form-control form-control-lg" placeholder="District/City (e.g. Lalitpur)" required />
-                    </div>
-                    <div class="mb-3">
-                        <input name="Tole" class="form-control form-control-lg" placeholder="Tole (e.g. Bhaisepati)" required />
-                    </div>
-                    <div class="mb-3">
-                        <input name="Ward" class="form-control form-control-lg" placeholder="Ward (e.g. 12)" required />
-                    </div>
-
-                    
-                </div>
-
-                <div class="modal-footer border-0 pt-0">
-                    <button type="button" class="btn btn-outline-secondary rounded-pill" data-bs-dismiss="modal">Cancel</button>
-                    <button type="submit" class="btn btn-primary rounded-pill px-4">Add Address</button>
-                </div>
-            </form>
-
-        </div>
-    </div>
-</div>
-
-
-
-<!-- ===== Add Skill Modal ===== -->
-<div class="modal fade" id="addSkillModal" tabindex="-1" aria-labelledby="addSkillModalLabel" aria-hidden="true">
-    <div class="modal-dialog modal-dialog-centered">
-        <div class="modal-content border-0 shadow-lg rounded-4">
-
-            <form asp-action="AddSkill" method="post" class="p-3">
-                <!-- Hidden UserId -->
-                <input type="hidden" name="UserId" value="@Model.UserId" />
-
-                <div class="modal-header border-0 pb-0">
-                    <h5 class="modal-title fw-bold" id="addSkillModalLabel">Add New Skill</h5>
-                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                </div>
-
-                <div class="modal-body pt-0">
-                    <!-- Skill Name -->
-                    <div class="mb-3">
-                        <input name="SkillName" class="form-control form-control-lg" placeholder="Skill Name (e.g. C#)" required />
-                    </div>
-
-                    <!-- Skill Level -->
-                    <div class="mb-3">
-                        <select name="SkillLevel" class="form-select form-select-lg" required>
-                            <option value="" disabled selected>Skill Level</option>
-                            <option value="Beginner">Beginner</option>
-                            <option value="Intermediate">Intermediate</option>
-                            <option value="Advanced">Advanced</option>
-                            <option value="Expert">Expert</option>
-                        </select>
-                    </div>
-
-                    <!-- Years of Experience -->
-                    <div class="mb-3">
-                        <input name="YearsOfExperience" type="number" min="0" class="form-control form-control-lg" placeholder="Years of Experience" />
-                    </div>
-                </div>
-
-                <div class="modal-footer border-0 pt-0">
-                    <button type="button" class="btn btn-outline-secondary rounded-pill" data-bs-dismiss="modal">Cancel</button>
-                    <button type="submit" class="btn btn-primary rounded-pill px-4">Add Skill</button>
-                </div>
-            </form>
-
-        </div>
-    </div>
-</div>
-
-
-<!-- ===== Add Education Modal ===== -->
-<div class="modal fade" id="addEducationModal" tabindex="-1" aria-labelledby="addEducationModalLabel" aria-hidden="true">
-    <div class="modal-dialog modal-dialog-centered">
-        <div class="modal-content border-0 shadow-lg rounded-4">
-
-            <form asp-action="AddEducation" method="post" class="p-3">
-                <!-- Hidden UserId -->
-                <input type="hidden" name="UserId" value="@Model.UserId" />
-
-                <div class="modal-header border-0 pb-0">
-                    <h5 class="modal-title fw-bold" id="addEducationModalLabel">Add New Education Details</h5>
-                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                </div>
-
-                <div class="modal-body pt-0">
-
-                    <div class="mb-3">
-                        <input name="InstitutionName" class="form-control form-control-lg"
-                               placeholder="Institution Name (e.g., Tribhuvan University)" required />
-                    </div>
-
-                    <div class="mb-3">
-                        <input name="Degree" class="form-control form-control-lg"
-                               placeholder="Degree (e.g., Bachelor's)" required />
-                    </div>
-
-                    <div class="mb-3">
-                        <input name="Field" class="form-control form-control-lg"
-                               placeholder="Field of Study (e.g., Computer Science)" required />
-                    </div>
-
-                    <div class="mb-3">
-                        <input name="Location" class="form-control form-control-lg"
-                               placeholder="Location (e.g., Kathmandu, Nepal)" required />
-                    </div>
-
-                    <div class="form-check mb-3">
-                        <input class="form-check-input" type="checkbox" id="currentlyStudying" name="CurrentlyStudying">
-                        <label class="form-check-label">Currently Studying Here</label>
-                    </div>
-
-                    <div class="mb-3">
-                        <input id="passedYear" name="PassedYear" class="form-control form-control-lg"
-                               placeholder="Passed Year (e.g., 2024)">
-                    </div>
-
-                    <div class="mb-3">
-                        <input id="grade" name="Grade" class="form-control form-control-lg"
-                               placeholder="Grade / GPA (e.g., 3.8, A+, 85%)">
-                    </div>
-
-                </div>
-
-                <div class="modal-footer border-0 pt-0">
-                    <button type="button" class="btn btn-outline-secondary rounded-pill" data-bs-dismiss="modal">Cancel</button>
-                    <button type="submit" class="btn btn-primary rounded-pill px-4">Add Education</button>
-                </div>
-            </form>
-
-        </div>
-    </div>
-
-
-    <script>
-        const checkbox = document.getElementById("currentlyStudying");
-        const passedYear = document.getElementById("passedYear");
-        const grade = document.getElementById("grade");
-
-        checkbox.addEventListener("change", function () {
-            if (this.checked) {
-                passedYear.disabled = true;
-                grade.disabled = true;
-                passedYear.value = "";
-                grade.value = "";
-            } else {
-                passedYear.disabled = false;
-                grade.disabled = false;
-            }
-        });
-    </script>
-</div>

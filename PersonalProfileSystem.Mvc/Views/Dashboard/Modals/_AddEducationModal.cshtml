@@ -1,0 +1,83 @@
+﻿@using PersonalProfileSystem.Mvc.ViewModels
+@model DashboardViewModel
+
+<div class="modal fade" id="addEducationModal" tabindex="-1" aria-labelledby="addEducationModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content border-0 shadow-lg rounded-4">
+
+            <form asp-action="AddEducation" method="post" class="p-3">
+                <!-- Hidden UserId -->
+                <input type="hidden" name="UserId" value="@Model.UserId" />
+
+                <div class="modal-header border-0 pb-0">
+                    <h5 class="modal-title fw-bold" id="addEducationModalLabel">Add New Education Details</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+
+                <div class="modal-body pt-0">
+
+                    <div class="mb-3">
+                        <input name="InstitutionName" class="form-control form-control-lg"
+                               placeholder="Institution Name (e.g., Tribhuvan University)" required />
+                    </div>
+
+                    <div class="mb-3">
+                        <input name="Degree" class="form-control form-control-lg"
+                               placeholder="Degree (e.g., Bachelor's)" required />
+                    </div>
+
+                    <div class="mb-3">
+                        <input name="Field" class="form-control form-control-lg"
+                               placeholder="Field of Study (e.g., Computer Science)" required />
+                    </div>
+
+                    <div class="mb-3">
+                        <input name="Location" class="form-control form-control-lg"
+                               placeholder="Location (e.g., Kathmandu, Nepal)" required />
+                    </div>
+
+                    <div class="form-check mb-3">
+                        <input class="form-check-input" type="checkbox" id="currentlyStudying" name="CurrentlyStudying">
+                        <label class="form-check-label">Currently Studying Here</label>
+                    </div>
+
+                    <div class="mb-3">
+                        <input id="passedYear" name="PassedYear" class="form-control form-control-lg"
+                               placeholder="Passed Year (e.g., 2024)">
+                    </div>
+
+                    <div class="mb-3">
+                        <input id="grade" name="Grade" class="form-control form-control-lg"
+                               placeholder="Grade / GPA (e.g., 3.8, A+, 85%)">
+                    </div>
+
+                </div>
+
+                <div class="modal-footer border-0 pt-0">
+                    <button type="button" class="btn btn-outline-secondary rounded-pill" data-bs-dismiss="modal">Cancel</button>
+                    <button type="submit" class="btn btn-primary rounded-pill px-4">Add Education</button>
+                </div>
+            </form>
+
+        </div>
+    </div>
+
+
+    <script>
+            const checkbox = document.getElementById("currentlyStudying");
+            const passedYear = document.getElementById("passedYear");
+            const grade = document.getElementById("grade");
+
+            checkbox.addEventListener("change", function () {
+                if (this.checked) {
+                    passedYear.disabled = true;
+                    grade.disabled = true;
+                    passedYear.value = "";
+                    grade.value = "";
+                } else {
+                    passedYear.disabled = false;
+                    grade.disabled = false;
+                }
+            });
+    </script>
+</div>
