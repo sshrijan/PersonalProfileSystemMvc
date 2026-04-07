@@ -11,5 +11,8 @@ namespace PersonalProfileSystem.Mvc.Services
         Task AddSkill(AddSkillViewModel model);
 
         Task AddEducation(AddEducationViewModel model);
+        Task<(bool Success, string Message)> DeleteAddressAsync(int userId, int addressId);
+        Task<(bool Success, string Message)> DeleteSkillAsync(int userId, int skillId);
+        Task<(bool Success, string Message)> DeleteEducationAsync(int userId, int educationId);
     }
 }

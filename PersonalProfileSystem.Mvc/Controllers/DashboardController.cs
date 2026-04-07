@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using PersonalProfileSystem.Mvc.Services;
 using PersonalProfileSystem.Mvc.ViewModels;
 
@@ -6,11 +7,11 @@ namespace PersonalProfileSystem.Mvc.Controllers
 {
     public class DashboardController : Controller
     {
-        private readonly IProfileService _service;
+        private readonly IProfileService _dashboardManagerService;
         private readonly DashboardService _dashboardService;
-        public DashboardController(IProfileService service, DashboardService dashboardService)
+        public DashboardController(IProfileService  dashboardManagerService, DashboardService dashboardService)
         {
-            _service = service;
+            _dashboardManagerService = dashboardManagerService;
             _dashboardService = dashboardService;
         }
 
@@ -40,7 +41,7 @@ namespace PersonalProfileSystem.Mvc.Controllers
 
             }
 
-            await _service.AddAddress(model);
+            await _dashboardManagerService.AddAddress(model);
             return RedirectToAction("Dashboard", new { userId = model.UserId });
 
         }
@@ -55,7 +56,7 @@ namespace PersonalProfileSystem.Mvc.Controllers
             }
 
 
-            await _service.AddSkill(model);
+            await _dashboardManagerService.AddSkill(model);
 
             return RedirectToAction("Dashboard", new { userId = model.UserId });
         }
@@ -70,9 +71,70 @@ namespace PersonalProfileSystem.Mvc.Controllers
 
             }
 
-            await _service.AddEducation(model);
+            await _dashboardManagerService.AddEducation(model);
             return RedirectToAction("Dashboard", new { userId = model.UserId });
 
         }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> DeleteAddress(int userId, int addressId)
+        {
+            var (success, message) = await _dashboardManagerService.DeleteAddressAsync(userId, addressId);
+
+            if (success)
+            {
+                TempData["Success"] = message;
+            }
+            else
+            {
+                TempData["Error"] = message;
+            }
+
+            return RedirectToAction("Dashboard", new { userId = userId });
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> DeleteSkill(int userId, int skillId)
+        {
+            var (success, message) = await _dashboardManagerService.DeleteSkillAsync(userId, skillId);
+
+            if (success)
+            {
+                TempData["Success"] = message;
+            }
+            else
+            {
+                TempData["Error"] = message;
+            }
+
+            return RedirectToAction("Dashboard", new { userId = userId });
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> DeleteEducation(int userId, int educationId)
+        {
+            var (success, message) = await _dashboardManagerService.DeleteEducationAsync(userId, educationId);
+
+            if (success)
+            {
+                TempData["Success"] = message;
+            }
+            else
+            {
+                TempData["Error"] = message;
+            }
+
+            return RedirectToAction("Dashboard", new { userId = userId });
+        }
+
+
+
+
+
+
     }
 }
+   

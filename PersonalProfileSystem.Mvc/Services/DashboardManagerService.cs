@@ -7,11 +7,11 @@ using Microsoft.AspNetCore.DataProtection.XmlEncryption;
 
 namespace PersonalProfileSystem.Mvc.Services
 {
-    public class DashboardAddService : IProfileService
+    public class DashboardManagerService : IProfileService
     {
         private readonly PersonalProfileSystemContext _context;
 
-        public DashboardAddService(PersonalProfileSystemContext context)
+        public DashboardManagerService(PersonalProfileSystemContext context)
         {
             _context = context;
         }
@@ -201,6 +201,80 @@ namespace PersonalProfileSystem.Mvc.Services
             _context.UserEducations.Add(userEducation);
             await _context.SaveChangesAsync();
 
+        }
+        public async Task<(bool Success, string Message)> DeleteAddressAsync(int userId, int addressId)
+        {
+            try
+            {
+                // Find the junction record
+                var userAddress = await _context.UserAddresses
+                    .FirstOrDefaultAsync(ua => ua.UserId == userId && ua.AddressId == addressId);
+
+                if (userAddress == null)
+                {
+                    return (false, "Address association not found!");
+                }
+
+                // Remove from junction table only
+                _context.UserAddresses.Remove(userAddress);
+                await _context.SaveChangesAsync();
+
+                return (true, "Address removed from your profile successfully!");
+            }
+            catch (Exception ex)
+            {
+                return (false, $"Error removing address: {ex.Message}");
+            }
+        }
+
+        public async Task<(bool Success, string Message)> DeleteSkillAsync(int userId, int skillId)
+        {
+            try
+            {
+                // Find the junction record
+                var userSkill = await _context.UserSkills
+                    .FirstOrDefaultAsync(us => us.UserId == userId && us.SkillId == skillId);
+
+                if (userSkill == null)
+                {
+                    return (false, "Skill association not found!");
+                }
+
+                // Remove from junction table only
+                _context.UserSkills.Remove(userSkill);
+                await _context.SaveChangesAsync();
+
+                return (true, "Skill removed from your profile successfully!");
+            }
+            catch (Exception ex)
+            {
+                return (false, $"Error removing skill: {ex.Message}");
+            }
+        }
+
+        public async Task<(bool Success, string Message)> DeleteEducationAsync(int userId, int educationId)
+        {
+            try
+            {
+                // Find the junction record
+                var userEducation = await _context.UserEducations
+                    .FirstOrDefaultAsync(ue => ue.UserId == userId && ue.EducationId == educationId);
+
+                if (userEducation == null)
+                {
+                    return (false, "Education association not found!");
+                }
+
+                // Remove from junction table only
+                _context.UserEducations.Remove(userEducation);
+                await _context.SaveChangesAsync();
+
+                return (true, "Education removed from your profile successfully!");
+            }
+            catch (Exception ex)
+            {
+                return (false, $"Error removing education: {ex.Message}");
+            }
         }
     }
 }

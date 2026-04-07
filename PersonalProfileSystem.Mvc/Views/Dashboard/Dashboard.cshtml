@@ -50,88 +50,131 @@
         </div>
 
     <!-- Addresses -->
-            <div class="card shadow-sm rounded-4 mb-2 p-3">
+<div class="card shadow-sm rounded-4 mb-2 p-3">
+    <div>
+        <h5 class="fw-bold d-inline"><i class="fa-solid fa-location-arrow" style="color: rgb(99, 230, 190);"></i> Addresses</h5>
+        <a href="#" class="btn btn-transparent float-end rounded-circle" data-bs-toggle="modal" data-bs-target="#addAddressModal">
+            <i class="fa-solid fa-plus"></i>
+        </a>
+    </div>
+
+    <ul class="list-unstyled mx-0">
+        @foreach (var ua in Model.Addresses)
+        {
+            var addr = ua.Address;
+            <li class="d-flex justify-content-between align-items-center mx-3">
+                <span>@addr.Tole, Ward @addr.Ward, @addr.DistrictCity, @addr.ProvinceState, @addr.Country</span>
                 <div>
-                    <h5 class="fw-bold d-inline"><i class="fa-solid fa-location-arrow" style="color: rgb(99, 230, 190);"></i> Addresses</h5>
-                    <a href="#" class="btn btn-transparent float-end rounded-circle" data-bs-toggle="modal" data-bs-target="#addAddressModal">
-                        <i class="fa-solid fa-plus"></i>
+                    <a href="#" class="btn btn-transparent rounded-circle" data-bs-toggle="modal" data-bs-target="#updateAddressModal">
+                        <i class="fa-solid fa-pen-to-square"></i>
                     </a>
+                    <form asp-action="DeleteAddress" asp-controller="Dashboard" method="post" style="display: inline;" onsubmit="return confirm('Are you sure you want to delete this address?');">
+                        <input type="hidden" name="userId" value="@ua.UserId" />
+                        <input type="hidden" name="addressId" value="@ua.AddressId" />
+                        <button type="submit" class="btn btn-transparent rounded-circle">
+                            <i class="fa-solid fa-trash" style="color: #dc3545;"></i>
+                        </button>
+                    </form>
                 </div>
+            </li>
+        }
+    </ul>
+</div>
 
-                <ul class="list-unstyled mx-0">
-                    @foreach (var ua in Model.Addresses)
+<!-- Skills -->
+<div class="card shadow-sm rounded-4 mb-2 p-3">
+    <div class="mb-2">
+        <h5 class="fw-bold mb-3 d-inline"><i class="fa-solid fa-star" style="color: rgb(255, 212, 59);"></i> Skills</h5>
+        <a href="#" class="btn btn-transparent float-end rounded-circle" data-bs-toggle="modal" data-bs-target="#addSkillModal">
+            <i class="fa-solid fa-plus"></i>
+        </a>
+    </div>
+
+    <ul class="list-group list-group-flush">
+        @if (Model.Skills.Any())
+        {
+            foreach (var us in Model.Skills)
+            {
+                var skill = us.Skill;
+                <li class="list-group-item d-flex justify-content-between align-items-center">
+                    <div>
+                        <div>
+                            <strong>@skill.SkillName</strong>
+                            <span class="text-muted">(@us.SkillLevel)</span>
+                        </div>
+                        <div><small>@us.YearsOfExperience years of experience</small></div>
+                    </div>
+                    <div>
+                        <a href="#" class="btn btn-transparent rounded-circle" data-bs-toggle="modal" data-bs-target="#updateSkillModal">
+                            <i class="fa-solid fa-pen-to-square"></i>
+                        </a>
+                        <form asp-action="DeleteSkill" asp-controller="Dashboard" method="post" style="display: inline;" onsubmit="return confirm('Are you sure you want to delete this skill?');">
+                            <input type="hidden" name="userId" value="@us.UserId" />
+                            <input type="hidden" name="skillId" value="@us.SkillId" />
+                            <button type="submit" class="btn btn-transparent rounded-circle">
+                                <i class="fa-solid fa-trash" style="color: #dc3545;"></i>
+                            </button>
+                        </form>
+                    </div>
+                </li>
+            }
+        }
+        else
+        {
+            <li class="list-group-item text-muted">No skills added yet.</li>
+        }
+    </ul>
+</div>
+
+<!-- Education -->
+<div class="card shadow-sm rounded-4 mb-2 p-3">
+    <div class="mb-2">
+        <h5 class="fw-bold d-inline"><i class="fa-solid fa-graduation-cap"></i> Education</h5>
+        <a href="#" class="btn btn-transparent float-end rounded-circle" data-bs-toggle="modal" data-bs-target="#addEducationModal">
+            <i class="fa-solid fa-plus"></i>
+        </a>
+    </div>
+    <ul class="list-group list-group-flush">
+        @foreach (var ue in Model.Educations)
+        {
+            var edu = ue.Education;
+            <li class="list-group-item d-flex justify-content-between align-items-center">
+                <div>
+                    <strong>@edu.Degree</strong> in @edu.Field <br />
+                    @edu.InstitutionName, @edu.Location
+                    <span class="text-muted">
+                        (@if (ue.CurrentlyStudying == true) 
+                            {
+                                <span>Present</span>
+                            }
+                        else
+                            {
+                                @ue.PassedYear
+                            }
+                        )
+                    </span>
+                    <br />
+                    @if (!string.IsNullOrEmpty(ue.Grade))
                     {
-                        var addr = ua.Address;
-                        <li class="d-flex justify-content-between align-items-center mx-3">
-                            <span>@addr.Tole, Ward @addr.Ward, @addr.DistrictCity, @addr.ProvinceState, @addr.Country</span>
-                            <a href="#" class="btn btn-transparent float-end rounded-circle" data-bs-toggle="modal" data-bs-target="#updateAddressModal">
-                                <i class="fa-solid fa-pen-to-square"></i>
-                            </a>
-                        </li>
+                        <span class="badge bg-success mt-1">GPA: @ue.Grade</span>
                     }
-                </ul>
-            </div>
-
-            <!-- Skills -->
-            <div class="card shadow-sm rounded-4 mb-2 p-3">
-                <div class="mb-2">
-                    <h5 class="fw-bold mb-3 d-inline"><i class="fa-solid fa-star" style="color: rgb(255, 212, 59);"></i> Skills</h5>
-                    <a href="#" class="btn btn-transparent float-end rounded-circle" data-bs-toggle="modal" data-bs-target="#addSkillModal">
-                        <i class="fa-solid fa-plus"></i>
+                </div>
+                <div>
+                    <a href="#" class="btn btn-transparent rounded-circle" data-bs-toggle="modal" data-bs-target="#updateEducationModal">
+                        <i class="fa-solid fa-pen-to-square"></i>
                     </a>
+                    <form asp-action="DeleteEducation" asp-controller="Dashboard" method="post" style="display: inline;" onsubmit="return confirm('Are you sure you want to delete this education entry?');">
+                        <input type="hidden" name="userId" value="@ue.UserId" />
+                        <input type="hidden" name="educationId" value="@ue.EducationId" />
+                        <button type="submit" class="btn btn-transparent rounded-circle">
+                            <i class="fa-solid fa-trash" style="color: #dc3545;"></i>
+                        </button>
+                    </form>
                 </div>
-
-                <ul class="list-group list-group-flush">
-                    @if (Model.Skills.Any())
-                    {
-                        foreach (var us in Model.Skills)
-                        {
-                            var skill = us.Skill;
-                            <li class="list-group-item d-flex justify-content-between align-items-center">
-                                <div>
-                                    <div>
-                                        <strong>@skill.SkillName</strong>
-                                        <span class="text-muted">(@us.SkillLevel)</span>
-                                    </div>
-                                    <div><small>@us.YearsOfExperience years of experience</small></div>
-                                </div>
-                                <a href="#" class="btn btn-transparent float-end rounded-circle" data-bs-toggle="modal" data-bs-target="#updateSkillModal">
-                                    <i class="fa-solid fa-pen-to-square"></i>
-                                </a>
-                            </li>
-                        }
-                    }
-                    else
-                    {
-                        <li class="list-group-item text-muted">No skills added yet.</li>
-                    }
-                </ul>
-            </div>
-
-            <!-- Education -->
-            <div class="card shadow-sm rounded-4 mb-2 p-3">
-                <div class="mb-2">
-                    <h5 class="fw-bold d-inline"><i class="fa-solid fa-graduation-cap"></i> Education</h5>
-                    <a href="#" class="btn btn-transparent float-end rounded-circle" data-bs-toggle="modal" data-bs-target="#addEducationModal">
-                        <i class="fa-solid fa-plus"></i>
-                    </a>
-                </div>
-                <ul class="list-group list-group-flush">
-                    @foreach (var ue in Model.Educations)
-                    {
-                        var edu = ue.Education;
-                        <li class="list-group-item d-flex justify-content-between align-items-center">
-                            <div>
-                                <strong>@edu.Degree</strong> in @edu.Field <br />
-                                @edu.InstitutionName, @edu.Location (@(ue.PassedYear?.ToString() ?? "Present"))
-                            </div>
-                            <a href="#" class="btn btn-transparent float-end rounded-circle" data-bs-toggle="modal" data-bs-target="#updateEducationModal">
-                                <i class="fa-solid fa-pen-to-square"></i>
-                            </a>
-                         </li>
-                    }
-                </ul>
-            </div>
+            </li>
+        }
+    </ul>
+</div>
 
         @await Html.PartialAsync("Modals/_UpdateProfilePicModal", Model)
         @await Html.PartialAsync("Modals/_UpdateCoverPicModal", Model)

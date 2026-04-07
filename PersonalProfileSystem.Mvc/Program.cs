@@ -13,7 +13,7 @@ builder.Services.AddDbContext<PersonalProfileSystemContext>(options =>
 builder.Services.AddScoped<LoginService>();
 builder.Services.AddScoped<DashboardService>();
 builder.Services.AddScoped<RegisterService>();
-builder.Services.AddScoped<IProfileService, DashboardAddService>();
+builder.Services.AddScoped<IProfileService, DashboardManagerService>();
 
 
 var app = builder.Build();

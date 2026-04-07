@@ -37,7 +37,8 @@
                     </div>
 
                     <div class="form-check mb-3">
-                        <input class="form-check-input" type="checkbox" id="currentlyStudying" name="CurrentlyStudying">
+                        <!-- IMPORTANT: Added value="true" and hidden field for proper binding -->
+                        <input class="form-check-input" type="checkbox" id="currentlyStudying" name="CurrentlyStudying" value="true">
                         <label class="form-check-label">Currently Studying Here</label>
                     </div>
 
@@ -61,23 +62,27 @@
 
         </div>
     </div>
-
-
-    <script>
-            const checkbox = document.getElementById("currentlyStudying");
-            const passedYear = document.getElementById("passedYear");
-            const grade = document.getElementById("grade");
-
-            checkbox.addEventListener("change", function () {
-                if (this.checked) {
-                    passedYear.disabled = true;
-                    grade.disabled = true;
-                    passedYear.value = "";
-                    grade.value = "";
-                } else {
-                    passedYear.disabled = false;
-                    grade.disabled = false;
-                }
-            });
-    </script>
 </div>
+
+<script>
+    const checkbox = document.getElementById("currentlyStudying");
+    const passedYear = document.getElementById("passedYear");
+    const grade = document.getElementById("grade");
+
+    checkbox.addEventListener("change", function () {
+        if (this.checked) {
+            passedYear.disabled = true;
+            grade.disabled = true;
+            passedYear.value = "";
+            grade.value = "";
+            // Remove required attribute if any
+            passedYear.removeAttribute('required');
+            grade.removeAttribute('required');
+        } else {
+            passedYear.disabled = false;
+            grade.disabled = false;
+        }
+    });
+
+   
+</script>
