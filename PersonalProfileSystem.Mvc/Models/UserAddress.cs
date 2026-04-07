@@ -11,6 +11,10 @@ public partial class UserAddress
 
     public bool IsActive { get; set; }
 
+    public DateTime? DeletedDate { get; set; }
+
+    public DateTime? UpdatedDate { get; set; }
+
     public virtual Address Address { get; set; } = null!;
 
     public virtual PersonInfo User { get; set; } = null!;

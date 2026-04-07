@@ -15,15 +15,9 @@ public partial class Contact
 
     public bool IsDeleted { get; set; }
 
-    public int? DeletedBy { get; set; }
-
     public DateTime? DeletedDate { get; set; }
 
-    public int? UpdatedBy { get; set; }
-
     public DateTime? UpdatedDate { get; set; }
-
-    public DateTime CreatedDate { get; set; }
 
     public virtual PersonInfo User { get; set; } = null!;
 }

@@ -33,19 +33,15 @@ namespace PersonalProfileSystem.Mvc.Services
         {
             try
             {
-                // Check if context is null
                 if (_context == null)
                     throw new Exception("DbContext is null");
 
-                // Check model
                 if (model == null)
                     throw new Exception("Model is null");
 
-                // Validate
                 if (model.UserId == 0)
                     throw new ArgumentException("UserId cannot be 0");
 
-                // Check if address exists
                 var existingAddress = await _context.Addresses
                     .FirstOrDefaultAsync(a =>
                         a.Tole == model.Tole &&
@@ -53,7 +49,6 @@ namespace PersonalProfileSystem.Mvc.Services
 
                 if (existingAddress == null)
                 {
-                    // Add new address
                     var newAddress = new Address
                     {
                         Tole = model.Tole,
@@ -68,7 +63,6 @@ namespace PersonalProfileSystem.Mvc.Services
 
                     if (saveResult > 0)
                     {
-                        // Add to UserAddresses
                         var userAddress = new UserAddress
                         {
                             UserId = model.UserId,
@@ -82,7 +76,6 @@ namespace PersonalProfileSystem.Mvc.Services
                 }
                 else
                 {
-                    // Check if user already has this address
                     var existingUserAddress = await _context.UserAddresses
                         .FirstOrDefaultAsync(ua =>
                             ua.UserId == model.UserId &&
@@ -100,26 +93,29 @@ namespace PersonalProfileSystem.Mvc.Services
                         _context.UserAddresses.Add(userAddress);
                         await _context.SaveChangesAsync();
                     }
+                    else if (!existingUserAddress.IsActive)
+                    {
+                        // Reactivate the soft-deleted record
+                        existingUserAddress.IsActive = true;
+                        existingUserAddress.DeletedDate = null;
+                        await _context.SaveChangesAsync();
+                    }
                 }
             }
             catch (Exception ex)
             {
-                // Log the error
                 Console.WriteLine($"Error: {ex.Message}");
                 Console.WriteLine($"Stack Trace: {ex.StackTrace}");
-                throw; // This will show the error in your UI
+                throw;
             }
         }
 
         public async Task AddSkill(AddSkillViewModel model)
         {
-            // Make sure the userId is valid
             if (model.UserId == 0) throw new ArgumentException("UserId cannot be 0");
 
-            // Check if skill already exists
             var skill = await _context.Skills
-                .FirstOrDefaultAsync(s => 
-                s.SkillName == model.SkillName);
+                .FirstOrDefaultAsync(s => s.SkillName == model.SkillName);
 
             if (skill == null)
             {
@@ -128,23 +124,31 @@ namespace PersonalProfileSystem.Mvc.Services
                 await _context.SaveChangesAsync();
             }
 
-            // Check if user already linked to this address
             var existingUserSkill = await _context.UserSkills
-                .FirstOrDefaultAsync(us => 
-                us.UserId == model.UserId && 
-                us.SkillId == skill.SkillId);
+                .FirstOrDefaultAsync(us => us.UserId == model.UserId && us.SkillId == skill.SkillId);
 
             if (existingUserSkill != null)
-                return; // skip adding duplicate
+            {
+                if (!existingUserSkill.IsActive)
+                {
+                    // Reactivate and update
+                    existingUserSkill.IsActive = true;
+                    existingUserSkill.SkillLevel = model.SkillLevel;
+                    existingUserSkill.YearsOfExperience = model.YearsOfExperience;
+                    existingUserSkill.DeletedDate = null;
+                    existingUserSkill.UpdatedDate = DateTime.Now;
+                    await _context.SaveChangesAsync();
+                }
+                return;
+            }
 
-            // Add to UserSkills
             var userSkill = new UserSkill
             {
                 UserId = model.UserId,
                 SkillId = skill.SkillId,
                 SkillLevel = model.SkillLevel,
                 YearsOfExperience = model.YearsOfExperience,
-                IsActive = true
+                IsActive = true,
             };
 
             _context.UserSkills.Add(userSkill);
@@ -153,17 +157,14 @@ namespace PersonalProfileSystem.Mvc.Services
 
         public async Task AddEducation(AddEducationViewModel model)
         {
-            // Make sure the userId is valid
             if (model.UserId == 0) throw new ArgumentException("UserId cannot be 0");
 
-            // Check if Education already exists
-            var education = await _context.Educations.FirstOrDefaultAsync(e => 
-            e.InstitutionName == model.InstitutionName &&
-            e.Degree == model.Degree &&
-            e.Field == model.Field &&
-            e.Location == model.Location);
+            var education = await _context.Educations.FirstOrDefaultAsync(e =>
+                e.InstitutionName == model.InstitutionName &&
+                e.Degree == model.Degree &&
+                e.Field == model.Field &&
+                e.Location == model.Location);
 
-            // If not, create new Education
             if (education == null)
             {
                 education = new Education
@@ -175,20 +176,29 @@ namespace PersonalProfileSystem.Mvc.Services
                 };
 
                 _context.Educations.Add(education);
-               await _context.SaveChangesAsync();
-                
+                await _context.SaveChangesAsync();
             }
 
-            // Check if user already linked to this Education
             var existingUserEducation = await _context.UserEducations.FirstOrDefaultAsync(ue =>
-            ue.UserId == model.UserId &&
-            ue.EducationId == education.EducationId);
+                ue.UserId == model.UserId &&
+                ue.EducationId == education.EducationId);
 
             if (existingUserEducation != null)
-                return; // skip adding duplicate
+            {
+                if (!existingUserEducation.IsActive)
+                {
+                    // Reactivate and update
+                    existingUserEducation.IsActive = true;
+                    existingUserEducation.CurrentlyStudying = model.CurrentlyStudying;
+                    existingUserEducation.Grade = model.Grade;
+                    existingUserEducation.PassedYear = model.PassedYear;
+                    existingUserEducation.DeletedDate = null;  
+                    existingUserEducation.UpdatedDate = DateTime.Now;
+                    await _context.SaveChangesAsync();
+                }
+                return;
+            }
 
-
-            // Add to userEducations
             var userEducation = new UserEducation
             {
                 UserId = model.UserId,
@@ -196,11 +206,10 @@ namespace PersonalProfileSystem.Mvc.Services
                 CurrentlyStudying = model.CurrentlyStudying,
                 Grade = model.Grade,
                 PassedYear = model.PassedYear,
-                IsActive = true
+                IsActive = true,
             };
             _context.UserEducations.Add(userEducation);
             await _context.SaveChangesAsync();
-
         }
         public async Task<(bool Success, string Message)> DeleteAddressAsync(int userId, int addressId)
         {
@@ -208,15 +217,17 @@ namespace PersonalProfileSystem.Mvc.Services
             {
                 // Find the junction record
                 var userAddress = await _context.UserAddresses
-                    .FirstOrDefaultAsync(ua => ua.UserId == userId && ua.AddressId == addressId);
+                    .FirstOrDefaultAsync(ua => ua.UserId == userId && ua.AddressId == addressId && ua.IsActive);
 
                 if (userAddress == null)
                 {
-                    return (false, "Address association not found!");
+                    return (false, "Address association not found or already removed!");
                 }
 
-                // Remove from junction table only
-                _context.UserAddresses.Remove(userAddress);
+                // Soft delete - mark as inactive and set deletion date
+                userAddress.IsActive = false;
+                userAddress.DeletedDate = DateTime.Now;
+
                 await _context.SaveChangesAsync();
 
                 return (true, "Address removed from your profile successfully!");
@@ -233,15 +244,17 @@ namespace PersonalProfileSystem.Mvc.Services
             {
                 // Find the junction record
                 var userSkill = await _context.UserSkills
-                    .FirstOrDefaultAsync(us => us.UserId == userId && us.SkillId == skillId);
+                    .FirstOrDefaultAsync(us => us.UserId == userId && us.SkillId == skillId && us.IsActive);
 
                 if (userSkill == null)
                 {
-                    return (false, "Skill association not found!");
+                    return (false, "Skill association not found or already removed!");
                 }
 
-                // Remove from junction table only
-                _context.UserSkills.Remove(userSkill);
+                // Soft delete - mark as inactive and set deletion date
+                userSkill.IsActive = false;
+                userSkill.DeletedDate = DateTime.Now;
+
                 await _context.SaveChangesAsync();
 
                 return (true, "Skill removed from your profile successfully!");
@@ -258,15 +271,17 @@ namespace PersonalProfileSystem.Mvc.Services
             {
                 // Find the junction record
                 var userEducation = await _context.UserEducations
-                    .FirstOrDefaultAsync(ue => ue.UserId == userId && ue.EducationId == educationId);
+                    .FirstOrDefaultAsync(ue => ue.UserId == userId && ue.EducationId == educationId && ue.IsActive);
 
                 if (userEducation == null)
                 {
-                    return (false, "Education association not found!");
+                    return (false, "Education association not found or already removed!");
                 }
 
-                // Remove from junction table only
-                _context.UserEducations.Remove(userEducation);
+                // Soft delete - mark as inactive and set deletion date
+                userEducation.IsActive = false;
+                userEducation.DeletedDate = DateTime.Now;
+
                 await _context.SaveChangesAsync();
 
                 return (true, "Education removed from your profile successfully!");

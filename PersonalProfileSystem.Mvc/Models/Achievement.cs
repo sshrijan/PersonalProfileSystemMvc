@@ -15,7 +15,5 @@ public partial class Achievement
 
     public bool IsDeleted { get; set; }
 
-
-
     public virtual ICollection<UserAchievement> UserAchievements { get; set; } = new List<UserAchievement>();
 }
