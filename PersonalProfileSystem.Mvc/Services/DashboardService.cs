@@ -19,11 +19,11 @@ namespace PersonalProfileSystem.Mvc.Services
         {
             var person = await _context.PersonInfos
                 .FirstOrDefaultAsync(p => p.UserId == userId && !p.IsDeleted);
-
             if (person == null) return null!;
 
             var contact = await _context.Contacts
                 .FirstOrDefaultAsync(c => c.UserId == userId && !c.IsDeleted);
+            if (contact == null) return null!;
 
             var educations = await _context.UserEducations
                 .Include(ue => ue.Education)
