@@ -64,25 +64,4 @@
     </div>
 </div>
 
-<script>
-    const checkbox = document.getElementById("currentlyStudying");
-    const passedYear = document.getElementById("passedYear");
-    const grade = document.getElementById("grade");
-
-    checkbox.addEventListener("change", function () {
-        if (this.checked) {
-            passedYear.disabled = true;
-            grade.disabled = true;
-            passedYear.value = "";
-            grade.value = "";
-            // Remove required attribute if any
-            passedYear.removeAttribute('required');
-            grade.removeAttribute('required');
-        } else {
-            passedYear.disabled = false;
-            grade.disabled = false;
-        }
-    });
-
-   
-</script>
+<script src="~/js/educationModal.js"></script>
