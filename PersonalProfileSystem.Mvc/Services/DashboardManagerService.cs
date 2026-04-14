@@ -295,46 +295,60 @@ namespace PersonalProfileSystem.Mvc.Services
         }
 
 
-
         public async Task<bool> UpdateEducationAsync(EducationViewModel model)
         {
-            var userEducation = await _context.UserEducations
-                .Include(ue => ue.Education)
-                .FirstOrDefaultAsync(ue =>
-                    ue.EducationId == model.EducationId &&
-                    ue.UserId == model.UserId &&
-                    ue.IsActive);
+            try
+            {
+                var userEducation = await _context.UserEducations
+                    .Include(ue => ue.Education)
+                    .FirstOrDefaultAsync(ue => ue.EducationId == model.EducationId
+                                            && ue.UserId == model.UserId
+                                            && ue.IsActive);
 
-            if (userEducation == null)
+                if (userEducation == null)
+                    return false;
+
+                // Update Education basic info
+                userEducation.Education.InstitutionName = model.InstitutionName;
+                userEducation.Education.Degree = model.Degree;
+                userEducation.Education.Field = model.Field;
+                userEducation.Education.Location = model.Location;
+
+                // Update UserEducation
+                userEducation.CurrentlyStudying = model.CurrentlyStudying;
+                userEducation.UpdatedDate = DateTime.Now;
+
+                if (model.CurrentlyStudying)
+                {
+                    // === THIS IS THE KEY FIX ===
+                    userEducation.PassedYear = null;
+                    userEducation.Grade = null;
+
+                    // Force EF Core to update these columns to NULL
+                    _context.Entry(userEducation).Property(x => x.PassedYear).IsModified = true;
+                    _context.Entry(userEducation).Property(x => x.Grade).IsModified = true;
+                }
+                else
+                {
+                    // Not currently studying
+                    userEducation.PassedYear = model.PassedYear;
+
+                    userEducation.Grade = string.IsNullOrWhiteSpace(model.Grade)
+                        ? null
+                        : model.Grade.Trim();
+                }
+
+                // Always mark this as modified too
+                _context.Entry(userEducation).Property(x => x.CurrentlyStudying).IsModified = true;
+
+                await _context.SaveChangesAsync();
+                return true;
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"Error in UpdateEducationAsync: {ex.Message}");
                 return false;
-
-            // Update Education table
-            userEducation.Education.InstitutionName = model.InstitutionName;
-            userEducation.Education.Degree = model.Degree;
-            userEducation.Education.Field = model.Field;
-            userEducation.Education.Location = model.Location;
-
-            userEducation.CurrentlyStudying = model.CurrentlyStudying;
-            userEducation.UpdatedDate = DateTime.Now;
-
-            if (model.CurrentlyStudying)
-            {
-                userEducation.PassedYear = null;
-                userEducation.Grade = null;
-
-                _context.Entry(userEducation).Property(x => x.PassedYear).IsModified = true;
-                _context.Entry(userEducation).Property(x => x.Grade).IsModified = true;
             }
-            else
-            {
-                userEducation.PassedYear = model.PassedYear == 0 ? null : model.PassedYear;
-                userEducation.Grade = string.IsNullOrWhiteSpace(model.Grade)
-                    ? null
-                    : model.Grade.Trim();
-            }
-
-            await _context.SaveChangesAsync();
-            return true;
         }
         public async Task<bool> UpdateSkillAsync(SkillViewModel model)
         {

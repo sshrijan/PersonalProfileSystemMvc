@@ -35,43 +35,110 @@ $(document).ready(function () {
     });
 
     // ==================== UPDATE EDUCATION MODAL ====================
-
-    function toggleEducationFields(isCurrentlyStudying) {
-        if (isCurrentlyStudying) {
-            $('#updatePassedYear').prop('disabled', true).val('');
-            $('#updateGrade').prop('disabled', true).val('');
-        } else {
-            $('#updatePassedYear').prop('disabled', false);
-            $('#updateGrade').prop('disabled', false);
-        }
-    }
-
     $('.update-education-btn').click(function () {
+        var educationId = $(this).data('education-id');
+        var userId = $(this).data('user-id');
+        var institution = $(this).data('institution-name') || '';
+        var degree = $(this).data('degree') || '';
+        var field = $(this).data('field') || '';
+        var location = $(this).data('location') || '';
+        var currentlyStudying = $(this).data('currently-studying');
+        var passedYear = $(this).data('passed-year');
+        var grade = $(this).data('grade') || '';
 
-        $('#formEducationId').val($(this).data('education-id'));
-        $('#formUserId').val($(this).data('user-id'));
+        // Fill form
+        $('#formEducationId').val(educationId);
+        $('#formUserId').val(userId);
+        $('#updateInstitutionName').val(institution);
+        $('#updateDegree').val(degree);
+        $('#updateField').val(field);
+        $('#updateLocation').val(location);
 
-        $('#updateInstitutionName').val($(this).data('institution-name'));
-        $('#updateDegree').val($(this).data('degree'));
-        $('#updateField').val($(this).data('field'));
-        $('#updateLocation').val($(this).data('location'));
+        var isCurrently = (currentlyStudying === true ||
+            currentlyStudying === 'true' ||
+            currentlyStudying === 'True' ||
+            currentlyStudying === 1);
 
-        let isCurrentlyStudying = $(this).data('currently-studying') === true ||
-            $(this).data('currently-studying') === "true";
+        $('#updateCurrentlyStudying').prop('checked', isCurrently);
 
-        $('#updateCurrentlyStudying').prop('checked', isCurrentlyStudying);
+        var pyInput = $('#updatePassedYear');
+        var gInput = $('#updateGrade');
 
-        if (!isCurrentlyStudying) {
-            $('#updatePassedYear').val($(this).data('passed-year') || '');
-            $('#updateGrade').val($(this).data('grade') || '');
+        if (isCurrently) {
+            pyInput.prop('readonly', true).val('');
+            gInput.prop('readonly', true).val('');
+        } else {
+            pyInput.prop('readonly', false).val((passedYear != null && passedYear !== 0) ? passedYear : '');
+            gInput.prop('readonly', false).val(grade);
         }
-
-        toggleEducationFields(isCurrentlyStudying);
     });
 
+    // Handle checkbox toggle inside the modal
     $(document).on('change', '#updateCurrentlyStudying', function () {
-        toggleEducationFields($(this).is(':checked'));
-    });
+        var checked = $(this).is(':checked');
+        var pyInput = $('#updatePassedYear');
+        var gInput = $('#updateGrade');
+
+        if (checked) {
+            pyInput.prop('readonly', true).val('');
+            gInput.prop('readonly', true).val('');
+        } else {
+            pyInput.prop('readonly', false);
+            gInput.prop('readonly', false);
+        }
+    });// ==================== UPDATE EDUCATION MODAL ====================
+$('.update-education-btn').click(function () {
+    var educationId   = $(this).data('education-id');
+    var userId        = $(this).data('user-id');
+    var institution   = $(this).data('institution-name') || '';
+    var degree        = $(this).data('degree') || '';
+    var field         = $(this).data('field') || '';
+    var location      = $(this).data('location') || '';
+    var currentlyStudying = $(this).data('currently-studying');
+    var passedYear    = $(this).data('passed-year');
+    var grade         = $(this).data('grade') || '';
+
+    // Fill form
+    $('#formEducationId').val(educationId);
+    $('#formUserId').val(userId);
+    $('#updateInstitutionName').val(institution);
+    $('#updateDegree').val(degree);
+    $('#updateField').val(field);
+    $('#updateLocation').val(location);
+
+    var isCurrently = (currentlyStudying === true || 
+                       currentlyStudying === 'true' || 
+                       currentlyStudying === 'True' || 
+                       currentlyStudying === 1);
+
+    $('#updateCurrentlyStudying').prop('checked', isCurrently);
+
+    var pyInput = $('#updatePassedYear');
+    var gInput  = $('#updateGrade');
+
+    if (isCurrently) {
+        pyInput.prop('readonly', true).val('');
+        gInput.prop('readonly', true).val('');
+    } else {
+        pyInput.prop('readonly', false).val((passedYear != null && passedYear !== 0) ? passedYear : '');
+        gInput.prop('readonly', false).val(grade);
+    }
+});
+
+// Handle checkbox toggle inside the modal
+$(document).on('change', '#updateCurrentlyStudying', function () {
+    var checked = $(this).is(':checked');
+    var pyInput = $('#updatePassedYear');
+    var gInput  = $('#updateGrade');
+
+    if (checked) {
+        pyInput.prop('readonly', true).val('');
+        gInput.prop('readonly', true).val('');
+    } else {
+        pyInput.prop('readonly', false);
+        gInput.prop('readonly', false);
+    }
+});
 
 
     // ==================== CONTACT MODAL ====================
