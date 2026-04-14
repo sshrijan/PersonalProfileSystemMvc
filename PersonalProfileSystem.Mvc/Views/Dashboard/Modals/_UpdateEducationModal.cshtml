@@ -22,24 +22,24 @@
                         <input type="hidden" name="UserId" id="formUserId" />
                         <input type="hidden" name="EducationId" id="formEducationId" />
 
+                        <!-- Hidden fallback (IMPORTANT) -->
+                        <input type="hidden" name="PassedYear" value="" />
+                        <input type="hidden" name="Grade" value="" />
+
                         <div class="mb-3">
-                            <input id="updateInstitutionName" name="InstitutionName" class="form-control form-control-lg"
-                                   placeholder="Institution Name (e.g., Tribhuvan University)" required />
+                            <input id="updateInstitutionName" name="InstitutionName" class="form-control form-control-lg" required />
                         </div>
 
                         <div class="mb-3">
-                            <input id="updateDegree" name="Degree" class="form-control form-control-lg"
-                                   placeholder="Degree (e.g., Bachelor's)" required />
+                            <input id="updateDegree" name="Degree" class="form-control form-control-lg" required />
                         </div>
 
                         <div class="mb-3">
-                            <input id="updateField" name="Field" class="form-control form-control-lg"
-                                   placeholder="Field of Study (e.g., Computer Science)" required />
+                            <input id="updateField" name="Field" class="form-control form-control-lg" required />
                         </div>
 
                         <div class="mb-3">
-                            <input id="updateLocation" name="Location" class="form-control form-control-lg"
-                                   placeholder="Location (e.g., Kathmandu, Nepal)" required />
+                            <input id="updateLocation" name="Location" class="form-control form-control-lg" required />
                         </div>
 
                         <div class="form-check mb-3">
@@ -54,7 +54,7 @@
 
                         <div class="mb-3">
                             <input id="updateGrade" name="Grade" class="form-control form-control-lg"
-                                   placeholder="Grade / GPA (e.g., 3.8, A+, 85%)">
+                                   placeholder="Grade / GPA">
                         </div>
                     </form>
                 </div>
@@ -68,54 +68,3 @@
         </div>
     </div>
 </div>
-<script src="~/js/educationModal.js"></script>
-
-@* <script>
-    // Populate function to fill the modal with education data
-    function populateUpdateEducationModal(educationId, institutionName, degree, field, location, currentlyStudying, passedYear, grade, userId) {
-        document.getElementById("formEducationId").value = educationId;
-        document.getElementById("formUserId").value = userId;
-        document.getElementById("updateInstitutionName").value = institutionName;
-        document.getElementById("updateDegree").value = degree;
-        document.getElementById("updateField").value = field;
-        document.getElementById("updateLocation").value = location;
-        
-        // Set delete form values
-        document.getElementById("deleteEducationId").value = educationId;
-        document.getElementById("deleteUserId").value = userId;
-        
-        const currentlyStudyingCheckbox = document.getElementById("updateCurrentlyStudying");
-        currentlyStudyingCheckbox.checked = currentlyStudying;
-        
-        if (currentlyStudying) {
-            updatePassedYear.disabled = true;
-            updateGrade.disabled = true;
-            updatePassedYear.value = "";
-            updateGrade.value = "";
-        } else {
-            updatePassedYear.disabled = false;
-            updateGrade.disabled = false;
-            updatePassedYear.value = passedYear;
-            updateGrade.value = grade;
-        }
-    }
-    
-    // Handle Currently Studying checkbox functionality
-    const updateCheckbox = document.getElementById("updateCurrentlyStudying");
-    const updatePassedYear = document.getElementById("updatePassedYear");
-    const updateGrade = document.getElementById("updateGrade");
-
-    if (updateCheckbox) {
-        updateCheckbox.addEventListener("change", function () {
-            if (this.checked) {
-                updatePassedYear.disabled = true;
-                updateGrade.disabled = true;
-                updatePassedYear.value = "";
-                updateGrade.value = "";
-            } else {
-                updatePassedYear.disabled = false;
-                updateGrade.disabled = false;
-            }
-        });
-    }
-</script> *@

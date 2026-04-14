@@ -1,7 +1,6 @@
 ﻿<div class="modal fade" id="updateContactModal" tabindex="-1" aria-labelledby="updateContactModalLabel" aria-hidden="true">
     <div class="modal-dialog modal-dialog-centered">
         <div class="modal-content border-0 shadow-lg rounded-4">
-
             <div class="p-3">
                 <div class="modal-header border-0 pb-0">
                     <h5 class="modal-title fw-bold" id="updateContactModalLabel">Update Contact Information</h5>
@@ -9,9 +8,9 @@
                 </div>
 
                 <div class="modal-body pt-0">
-                    <!-- Update Form -->
                     <form asp-action="UpdateContact" method="post" id="updateContactForm">
                         <input type="hidden" name="UserId" value="@Model.UserId" />
+                        <input type="hidden" name="ContactId" id="contactId" value="@Model.Contact?.ContactId" />
 
                         <div class="mb-3">
                             <input name="Email" value="@Model.Contact?.Email" type="email" class="form-control form-control-lg"
@@ -30,7 +29,6 @@
                     <button type="submit" form="updateContactForm" class="btn btn-primary rounded-pill px-4">Update Contact</button>
                 </div>
             </div>
-
         </div>
     </div>
 </div>

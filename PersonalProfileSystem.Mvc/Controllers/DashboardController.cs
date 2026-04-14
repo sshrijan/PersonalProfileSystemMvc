@@ -32,7 +32,7 @@ namespace PersonalProfileSystem.Mvc.Controllers
 
 
         [HttpPost]
-        public async Task<IActionResult> AddAddress(AddAddressViewModel model)
+        public async Task<IActionResult> AddAddress(AddressViewModel model)
         {
             if (!ModelState.IsValid)
             {
@@ -47,7 +47,7 @@ namespace PersonalProfileSystem.Mvc.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> AddSkill(AddSkillViewModel model)
+        public async Task<IActionResult> AddSkill(SkillViewModel model)
         {
             if (!ModelState.IsValid)
             {
@@ -62,7 +62,7 @@ namespace PersonalProfileSystem.Mvc.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> AddEducation(AddEducationViewModel model)
+        public async Task<IActionResult> AddEducation(EducationViewModel model)
         {
             if (!ModelState.IsValid)
             {
@@ -131,6 +131,105 @@ namespace PersonalProfileSystem.Mvc.Controllers
         }
 
 
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> UpdateContact(ContactViewModel model)
+        {
+            if (!ModelState.IsValid)
+            {
+                TempData["Error"] = "Invalid contact data.";
+                return RedirectToAction("Dashboard", new { userId = model.UserId });
+            }
+
+            var result = await _dashboardManagerService.UpdateContactAsync(model);
+
+            if (result)
+            {
+                TempData["Success"] = "Contact updated successfully.";
+            }
+            else
+            {
+                TempData["Error"] = "Failed to update contact.";
+            }
+
+            return RedirectToAction("Dashboard", new { userId = model.UserId });
+        }
+
+        // UPDATE ADDRESS
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> UpdateAddress(AddressViewModel model)
+        {
+            if (!ModelState.IsValid)
+            {
+                TempData["Error"] = "Invalid address data.";
+                return RedirectToAction("Dashboard", new { userId = model.UserId });
+            }
+
+            var result = await _dashboardManagerService.UpdateAddressAsync(model);
+
+            if (result)
+            {
+                TempData["Success"] = "Address updated successfully.";
+            }
+            else
+            {
+                TempData["Error"] = "Failed to update address.";
+            }
+
+            return RedirectToAction("Dashboard", new { userId = model.UserId });
+        }
+
+        // UPDATE SKILL
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> UpdateSkill(SkillViewModel model)
+        {
+            if (!ModelState.IsValid)
+            {
+                TempData["Error"] = "Invalid skill data.";
+                return RedirectToAction("Dashboard", new { userId = model.UserId });
+            }
+
+            var result = await _dashboardManagerService.UpdateSkillAsync(model);
+
+            if (result)
+            {
+                TempData["Success"] = "Skill updated successfully.";
+            }
+            else
+            {
+                TempData["Error"] = "Failed to update skill.";
+            }
+
+            return RedirectToAction("Dashboard", new { userId = model.UserId });
+        }
+
+        // UPDATE EDUCATION
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> UpdateEducation(EducationViewModel model)
+        {
+            if (!ModelState.IsValid)
+            {
+                TempData["Error"] = "Invalid education data.";
+                return RedirectToAction("Dashboard", new { userId = model.UserId });
+            }
+
+            var result = await _dashboardManagerService.UpdateEducationAsync(model);
+
+            if (result)
+            {
+                TempData["Success"] = "Education updated successfully.";
+            }
+            else
+            {
+                TempData["Error"] = "Failed to update education.";
+            }
+
+            return RedirectToAction("Dashboard", new { userId = model.UserId });
+        }
 
 
 
