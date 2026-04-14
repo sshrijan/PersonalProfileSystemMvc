@@ -17,7 +17,7 @@ namespace PersonalProfileSystem.Mvc.Services
         Task<bool> UpdateSkillAsync(SkillViewModel model);
         Task<bool> UpdateAddressAsync(AddressViewModel model);
         Task<bool> UpdateContactAsync(ContactViewModel model);
-
+        Task<bool> UpdateProfileAsync(ProfileViewModel model);
 
 
         Task<(bool Success, string Message)> DeleteAddressAsync(int userId, int addressId);

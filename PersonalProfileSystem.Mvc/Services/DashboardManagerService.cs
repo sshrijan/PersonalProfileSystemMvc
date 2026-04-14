@@ -1,9 +1,10 @@
-﻿using PersonalProfileSystem.Mvc.Data;
+﻿using Microsoft.AspNetCore.DataProtection.XmlEncryption;
+using Microsoft.EntityFrameworkCore;
+using Microsoft.IdentityModel.Tokens;
+using PersonalProfileSystem.Mvc.Data;
 using PersonalProfileSystem.Mvc.Models;
 using PersonalProfileSystem.Mvc.ViewModels;
-using Microsoft.EntityFrameworkCore;
 using System.Linq;
-using Microsoft.AspNetCore.DataProtection.XmlEncryption;
 
 namespace PersonalProfileSystem.Mvc.Services
 {
@@ -320,6 +321,9 @@ namespace PersonalProfileSystem.Mvc.Services
             {
                 userEducation.PassedYear = null;
                 userEducation.Grade = null;
+
+                _context.Entry(userEducation).Property(x => x.PassedYear).IsModified = true;
+                _context.Entry(userEducation).Property(x => x.Grade).IsModified = true;
             }
             else
             {
@@ -405,30 +409,49 @@ namespace PersonalProfileSystem.Mvc.Services
             }
         }
 
+        public async Task<bool> UpdateProfileAsync(ProfileViewModel model)
+        {
+            var person = await _context.PersonInfos
+                .FirstOrDefaultAsync(p => p.UserId == model.UserId);
+
+            if (person == null)
+                return false;
+
+            person.FirstName = model.FirstName;
+            person.MiddleName = model.MiddleName;
+            person.LastName = model.LastName;
+            person.Dob = DateOnly.FromDateTime(model.Dob);
+
+            await _context.SaveChangesAsync();
+            return true;
+        }
+
+
         public async Task<bool> UpdateContactAsync(ContactViewModel model)
         {
+            if (model == null || model.ContactId == 0)
+                return false;
+
+            var contact = await _context.Contacts
+                .FirstOrDefaultAsync(c => c.ContactId == model.ContactId && c.UserId == model.UserId);
+
+            if (contact == null)
+                return false;
+
+            // Update fields
+            contact.Email = model.Email?.Trim();
+            contact.Phone = model.Phone;
+
             try
             {
-                // Check if contact exists and is not deleted
-                var contact = await _context.Contacts
-                    .FirstOrDefaultAsync(c => c.ContactId == model.ContactId
-                        && c.UserId == model.UserId
-                        && !c.IsDeleted);
-
-                if (contact == null)
-                    return false;
-
-                // Update contact information
-                contact.Email = model.Email;
-                contact.Phone = model.Phone;
-                contact.UpdatedDate = DateTime.UtcNow;
-
                 await _context.SaveChangesAsync();
                 return true;
             }
-            catch
+            catch (Exception ex)
             {
-                throw;
+                // Log the exception in real project
+                Console.WriteLine($"Error updating contact: {ex.Message}");
+                return false;
             }
         }
 

@@ -1,5 +1,13 @@
 ﻿namespace PersonalProfileSystem.Mvc.ViewModels
 {
+    public class ProfileViewModel
+    {
+        public int UserId { get; set; }
+        public string FirstName { get; set; }
+        public string? MiddleName { get; set; }
+        public string LastName { get; set; }
+        public DateTime Dob { get; set; }
+    }
     public class AddressViewModel
     {
         // For Add: Id will be 0, For Update: Id will have value
@@ -35,7 +43,7 @@
         public string Field { get; set; }
         public string InstitutionName { get; set; }
         public string Location { get; set; }
-        public bool? CurrentlyStudying { get; set; }
+        public bool CurrentlyStudying { get; set; }
         public string? Grade { get; set; }
         public int? PassedYear { get; set; }
 

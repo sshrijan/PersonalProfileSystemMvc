@@ -41,9 +41,12 @@
         <div class="card shadow-sm rounded-4 mb-2 p-3">
             <div>
                 <h5 class="fw-bold d-inline"><i class="fa-solid fa-address-book" style="color: rgb(116, 192, 252);"></i> Contact Information</h5>
-                    <a href="#" class="btn btn-transparent float-end rounded-circle" data-bs-toggle="modal" data-bs-target="#updateSkmyodal">
-                        <i class="fa-solid fa-pen-to-square"></i>
-                    </a>
+                <button type="button"
+                        class="btn btn-transparent float-end rounded-circle"
+                        data-bs-toggle="modal"
+                        data-bs-target="#updateContactModal">
+                    <i class="fa-solid fa-pen-to-square"></i>
+                </button>
             </div>
             <p><strong>Email:</strong> @Model.Contact.Email</p>
             <p><strong>Phone:</strong> @Model.Contact.Phone</p>
@@ -217,10 +220,10 @@
         @await Html.PartialAsync("Modals/_UpdateEducationModal", Model)
 
 </div>
-<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"></script>
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 <script src="~/js/dashboardModals.js"></script>
-<script src="~/js/educationModals.js"></script>
+
 
 
 

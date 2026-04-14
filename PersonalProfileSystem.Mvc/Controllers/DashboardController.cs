@@ -132,30 +132,6 @@ namespace PersonalProfileSystem.Mvc.Controllers
 
 
 
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        public async Task<IActionResult> UpdateContact(ContactViewModel model)
-        {
-            if (!ModelState.IsValid)
-            {
-                TempData["Error"] = "Invalid contact data.";
-                return RedirectToAction("Dashboard", new { userId = model.UserId });
-            }
-
-            var result = await _dashboardManagerService.UpdateContactAsync(model);
-
-            if (result)
-            {
-                TempData["Success"] = "Contact updated successfully.";
-            }
-            else
-            {
-                TempData["Error"] = "Failed to update contact.";
-            }
-
-            return RedirectToAction("Dashboard", new { userId = model.UserId });
-        }
-
         // UPDATE ADDRESS
         [HttpPost]
         [ValidateAntiForgeryToken]
@@ -230,6 +206,56 @@ namespace PersonalProfileSystem.Mvc.Controllers
 
             return RedirectToAction("Dashboard", new { userId = model.UserId });
         }
+
+
+        [HttpPost]
+        public async Task<IActionResult> UpdateProfile(ProfileViewModel model)
+        {
+            if (!ModelState.IsValid)
+            {
+                return RedirectToAction("Dashboard"); // or return with error
+            }
+
+            var result = await _dashboardManagerService.UpdateProfileAsync(model);
+
+            if (!result)
+            {
+                TempData["Error"] = "Failed to update profile.";
+            }
+            else
+            {
+                TempData["Success"] = "Profile updated successfully.";
+            }
+
+            return RedirectToAction("Dashboard", new { userId = model.UserId });
+        }
+
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]   // Good practice for security
+        public async Task<IActionResult> UpdateContact(ContactViewModel model)
+        {
+            if (!ModelState.IsValid)
+            {
+                TempData["Error"] = "Invalid data. Please check your inputs.";
+                return RedirectToAction("Dashboard", new { userId = model.UserId });
+            }
+
+            var result = await _dashboardManagerService.UpdateContactAsync(model);
+
+            if (result)
+            {
+                TempData["Success"] = "Contact updated successfully.";
+            }
+            else
+            {
+                TempData["Error"] = "Failed to update contact. Contact not found.";
+            }
+
+            return RedirectToAction("Dashboard", new { userId = model.UserId });
+        }
+
+
 
 
 
